@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Scanner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+
+        button, select {
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            background-color: #ffe32d;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+            width: 20rem;
+        }
+        button {
+            width: 20rem;
+        }
+        a {
+            color: black;
+            text-decoration: none;
+            width: 20rem;
+            border: 1px solid black;
+        }
+        button:hover, select:hover {
+            background-color: #efae0b;
+        }
+        .model_btn{
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 10px;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+            width: 20rem;
+            
+        }
+        #scan-again-button{
+            background-color:#ffe32d;
+
+        }
+
+        #add-product-button{
+            background-color: #ffe32d;
+
+        }
+        #cancel-button{
+            background-color: rgb(255, 45, 45);
+            color: white;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+
+        /* Fullscreen video */
+        #video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        #video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            margin: 15% auto;
+            margin-top: 9rem;
+            padding: 5px;
+            border: 0;
+            width: 70%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            text-align: center;
+            color: #333;
+            width: 95%;
+
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            cursor: pointer;
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 600px) {
+            .modal-content {
+                width: 95%;
+            }
+        }
+
+        .btn-group {
+            margin-top: 20px;
+        }
+
+        .btn-group button {
+            margin: 10px 5px;
+        }
+        .btn-location{
+            margin-top: 18rem;
+
+        }
+        .PalSika{
+            
+            font-size: 5rem;
+            margin-top: 1rem;
+            font-weight: bold;
+            color: #ffe32d;
+        }
+        .Sika{
+            color: rgb(255, 45, 45);
+        }
+        .customer-price{
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .retail-price{
+            color: #aaa;
+        }
+        .code-ID{
+            font-size: larger;
+            font-weight: bold;
+        }
+        .price-background{
+            background-color: #ffe32d;
+
+        }
+        </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+</head>
+<body>
+    <h1 class="PalSika">Pal<span class="Sika">Sika</span></h1>
+    <h1>Barcode Scanner</h1>
+    <div class="btn-location">
+    <select id="camera-select">
+        <option value="" selected="selected">Select a camera</option>
+    </select>
+    <button id="scan-button">Scan Barcode</button>
+    <button id="all-products-button">All Products</button>
+</div>
+    <div id="result"></div>
+
+    <!-- Video container for fullscreen -->
+    <div id="video-container">
+        <video id="video" autoplay></video>
+    </div>
+
+    <!-- Modal for product info or 'not found' -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-header-text">Product Not Found</h2>
+                <span class="close" id="close-modal">&times;</span>
+            </div>
+            <div id="modal-body">
+                <p id="modal-message">The product you scanned is not registered.</p>
+                <div class="btn-group">
+                    <button id="scan-again-button" class="model_btn">Scan Again</button>
+                    <button id="add-product-button" class="model_btn">Add This Product</button>
+                    <button id="edit-product-button" class="model_btn">Edit This Product</button>
+                    <button id="cancel-button" class="model_btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div hidden id="code_var"></div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const cameraSelect = document.getElementById('camera-select');
+    let selectedCameraId = null;
+    let isQuaggaInitialized = false;
+
+    const videoContainer = document.getElementById('video-container');
+    const videoElement = document.getElementById('video');
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('close-modal');
+    const modalHeaderText = document.getElementById('modal-header-text');
+    const modalMessage = document.getElementById('modal-message');
+    const scanAgainButton = document.getElementById('scan-again-button');
+    const addProductButton = document.getElementById('add-product-button');
+    const cancelButton = document.getElementById('cancel-button');
+    const editButton = document.getElementById('edit-product-button');
+    const allproductsButton = document.getElementById('all-products-button')
+
+    // Define elements for displaying product information
+    const productName = document.createElement('p');
+    const productInfo = document.createElement('p');
+    const productPrice = document.createElement('p');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            return navigator.mediaDevices.enumerateDevices();
+        })
+        .then(function(devices) {
+            devices.forEach(function(device) {
+                if (device.kind === 'videoinput') {
+                    const option = document.createElement('option');
+                    option.value = device.deviceId;
+                    option.textContent = device.label || `Camera ${cameraSelect.length + 1}`;
+                    cameraSelect.appendChild(option);
+                }
+            });
+        })
+        .catch(function(err) {
+            console.error("Error accessing media devices: ", err);
+        });
+
+    cameraSelect.addEventListener('change', function() {
+        selectedCameraId = this.value;
+        if (isQuaggaInitialized) {
+            Quagga.stop();
+            startQuagga();
+        }
+    });
+
+    document.getElementById('scan-button').addEventListener('click', function() {
+        if (!selectedCameraId) {
+            alert("No camera selected!");
+            return;
+        }
+        startQuagga();
+    });
+
+    function startQuagga() {
+        videoContainer.style.display = "block";
+
+        videoContainer.requestFullscreen?.();
+
+        Quagga.init({
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: videoElement,
+                constraints: {
+                    deviceId: selectedCameraId,
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            },
+            decoder: {
+                readers: ["ean_reader"],
+                multiple: false
+            }
+        }, function(err) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            Quagga.start();
+            isQuaggaInitialized = true;
+
+            const track = Quagga.CameraAccess.getActiveTrack();
+            if (track) {
+                videoElement.srcObject = new MediaStream([track]);
+            }
+        });
+
+        Quagga.onDetected(function(data) {
+            Quagga.offDetected();
+            Quagga.stop();
+            const code = data.codeResult.code;
+
+            fetch(`/scan/${code}/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        // Product not found, show modal with options
+                        modalHeaderText.innerText = "Product Not Found";
+                        modalMessage.innerHTML = `The scanned product with ID <span class = "code-ID"> ${code} </span> is not registered.`;
+                        addProductButton.style.display = "inline-block";  // Show Add Product option
+                        editButton.style.display = "none"; // hide the edit button
+                        modal.style.display = "block";
+                        document.getElementById("code_var").innerHTML = code;
+                    } else {
+                        // Product found, display product details in the modal
+                        modalHeaderText.innerText = data.name;
+                        modalMessage.innerHTML = `<p class="customer-price">Customer Price: <span class = "price-background">${data.customer_price}</span></p>
+                                                <p class= "retail-price">Retail Price: ${data.retail_price}</p>
+                                                <p>Notes: ${data.notes}</p>`;
+                        addProductButton.style.display = "none";  // Hide Add Product option
+                        editButton.style.display = "inline-block"
+                        modal.style.display = "block";
+                        document.getElementById("code_var").innerHTML = code;
+                    }
+                })
+                .finally(() => {
+                    document.exitFullscreen?.();
+                    videoContainer.style.display = "none";
+                    videoElement.srcObject = null;
+                });
+        });
+    }
+
+    closeModal.addEventListener('click', function() {
+        modal.style.display = "none";
+    });
+
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+
+    scanAgainButton.addEventListener('click', function() {
+        modal.style.display = "none";
+        startQuagga();
+    });
+
+    addProductButton.addEventListener('click', function() {
+        const code = document.getElementById("code_var").innerHTML;
+        
+        window.location.href = `/add-product/${code}/`;
+    });
+
+    editButton.addEventListener('click', function(){
+        const code = document.getElementById("code_var").innerHTML;
+        window.location.href= `/edit_product_page/${code}/`;
+    })
+
+    cancelButton.addEventListener('click', function() {
+        modal.style.display = "none";
+    });
+
+    allproductsButton.addEventListener('click', function(){
+        window.location.href= "/search_for_product_page/"
+    })
+});
+
+    </script>
+</body>
+</html>
