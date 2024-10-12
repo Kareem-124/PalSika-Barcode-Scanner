@@ -48,16 +48,16 @@ Steps
 
     bash
 
-git clone https://github.com/yourusername/barcode-scanning-app.git
+git clone https://github.com/Kareem-124/PalSika-Barcode-Scanner.git
 cd barcode-scanning-app
 
 Create a virtual environment:
 
-bash
+```bash
 
 python -m venv venv
 source venv/bin/activate   # On Windows: venv\Scripts\activate
-
+```
 Install the required dependencies:
 
 bash
