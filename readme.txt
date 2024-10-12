@@ -1,15 +1,16 @@
 Barcode Scanning and Product Management Web Application
 Table of Contents
 
-    Project Description
-    Features
-    Technologies Used
-    Setup Instructions
-    Usage
-    Database
-    Project Structure
-    Contributing
-    License
+-Project Description
+-Features
+-Technologies Used
+-Setup Instructions
+-Usage
+-Database
+-Project Structure
+-Contributing
+-License
+-Future plan
 
 Project Description
 
@@ -79,14 +80,18 @@ Run the development server:
 
 bash
 
-    python manage.py runserver
+    python manage.py runsslserver 0.0.0.0:8000
 
-    Open your browser and go to http://127.0.0.1:8000 to view the application.
+    We are required to run the server using "https" to be able to use the devices cameras.
+    open your command prompt and type: ipconfig
+    search for the IPv4 Address, it should look something like this: 192.168.10.5
+    Open your browser and go to https://192.168.10.5:8000 (This is just an exmple you need to enter you IPv4 address) to view the application.
 
 Usage
 Phase One: Barcode Scanning
 
     Scan Products: Click on the scan button, select the camera, and scan the barcode. The product details will be displayed.
+Note: Some smart phones cameras auto focuse only once - when they are turned on- so make sure you point the camera to the required bar code before pressing the scan button. 
     Manage Products: You can add new products or edit existing ones if the barcode is unregistered or needs updating.
 
 Phase Two: Product Search
@@ -106,7 +111,6 @@ This project uses an SQLite database for storing product information. Each produ
 
 Project Structure
 
-arduino
 
 barcode-scanning-app/
 │
@@ -145,3 +149,14 @@ Steps to Contribute:
 License
 
 This project is licensed under the MIT License.
+
+Future Plan
+
+Featuers will be added:
+-Back-end Validation.
+-Cookies to save the last selected camera for the user.
+-Change the "All-Products" page layout to improve the readabilty for the user when using small screens.
+-Add delete/edit products at "All-Products" page.
+-Adding 'beeb' sound when scanning products.
+-Improving the security for the application to meet the web security standers.
+
