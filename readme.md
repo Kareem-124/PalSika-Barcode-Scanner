@@ -44,13 +44,13 @@ Prerequisites
 
 # Steps
 
-    Clone the repository:
+Clone the repository:
 
-    bash
+```bash
 
 git clone https://github.com/Kareem-124/PalSika-Barcode-Scanner.git
 cd barcode-scanning-app
-
+```
 Create a virtual environment:
 
 ```bash
@@ -66,18 +66,18 @@ pip install -r requirements.txt
 
 Set up the database:
 
-bash
+```bash
 
 python manage.py migrate
-
+```
 Create a superuser to access the Django admin:
 
-bash
+```bash
 
 python manage.py createsuperuser
-
-Run the development server:
 ```
+Run the development server:
+
 ```bash
 
     python manage.py runsslserver 0.0.0.0:8000
@@ -85,7 +85,7 @@ Run the development server:
     We are required to run the server using "https" to be able to use the devices cameras.
     open your command prompt and type: ipconfig
     search for the IPv4 Address, it should look something like this: 192.168.10.5
-    Open your browser and go to https://192.168.10.5:8000 (This is just an exmple you need to enter you IPv4 address) to view the application.
+    Open your browser and go to https://192.168.10.5:8000 (This is just an example you need to enter you IPv4 address) to view the application.
 ```
 # Usage
 ## Phase One: Barcode Scanning
@@ -152,11 +152,11 @@ This project is licensed under the MIT License.
 
 # Future Plan
 
-Featuers will be added:
+Features will be added:
 -Back-end Validation.
 -Cookies to save the last selected camera for the user.
--Change the "All-Products" page layout to improve the readabilty for the user when using small screens.
+-Change the "All-Products" page layout to improve the readability for the user when using small screens.
 -Add delete/edit products at "All-Products" page.
--Adding 'beeb' sound when scanning products.
+-Adding 'beep' sound when scanning products.
 -Improving the security for the application to meet the web security standers.
 
