@@ -284,14 +284,16 @@ This project is licensed under the MIT License.
 
 Features will be added:
 
-- Back-end Validation.
+- [ ] Back-end Validation.
 
-- Cookies to save the last selected camera for the user.
+- [ ]  Cookies to save the last selected camera for the user.
 
-- Change the "All-Products" page layout to improve the readability for the user when using small screens.
+- [ ]  Change the "All-Products" page layout to improve the readability for the user when using small screens.
 
-- Add delete/edit products at "All-Products" page.
+- [ ]  Add delete/edit products at "All-Products" page.
 
-- Adding 'beep' sound when scanning products.
+- [ ]  Adding 'beep' sound when scanning products.
 
-- Improving the security for the application to meet the web security standers.
+- [ ] Improving the security for the application to meet the web security standers.
+
+# Demo (Work In Progress)
