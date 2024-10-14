@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search for Products</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.product-table th, .product-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.product-table th {
+    background-color: #ffe32d;
+    color: black;
+}
+
+.product-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.product-table tr:hover {
+    background-color: #ffeb9d;
+}
+
+
+.btn-home{
+    padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            background-color: #ffe32d;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+            width: 20rem;
+}
+.btn-home:hover{
+    background-color: #efae0b;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+.btn-group{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+    .search-bar input {
+        width: 100%;
+    }
+
+    .product-table th, .product-table td {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .product-table {
+        font-size: 12px;
+    }
+
+    .btn-home{
+        width: 10rem;
+        font-size: 12px;
+        padding: 10px 5px;
+        
+    }
+}
+</style>
+<body>
+    <div class="container">
+        <h1>Product List</h1>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search for a product..." onkeyup="filterTable()">
+        </div>
+        <div class="btn-group">
+            <button id="home-btn" class="btn-home">Home Page</button>
+            <button id="add-product-btn" class="btn-home">Add New Product (+)</button>
+        </div>
+        <table id="product-table" class="product-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Customer Price</th>
+                    <th>Retail Price</th>
+                    <th>Category</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%  for product in products%}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ product.product_id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.customer_price }}</td>
+                    <td>{{ product.retail_price }}</td>
+                    <td>{{ product.category }}</td>
+                    <td>{{ product.notes }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+
+    <script>
+        const homeButton = document.getElementById('home-btn')
+        const addNewProductButton = document.getElementById('add-product-btn')
+        
+
+        homeButton.addEventListener('click', function(){
+            window.location.href ="/"
+        })
+
+        addNewProductButton.addEventListener('click', function(){
+            window.location.href="/add-product_page"
+        })
+        function filterTable() {
+            const searchInput = document.getElementById('search-input');
+            const filter = searchInput.value.toLowerCase();
+            const table = document.getElementById('product-table');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                let visible = false;
+                const cols = rows[i].getElementsByTagName('td');
+                for (let j = 0; j < cols.length; j++) {
+                    if (cols[j].textContent.toLowerCase().includes(filter)) {
+                        visible = true;
+                    }
+                }
+                rows[i].style.display = visible ? '' : 'none';
+            }
+        }
+
+    </script>
+</body>
+</html>

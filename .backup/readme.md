@@ -286,7 +286,7 @@ Features will be added:
 
 - [ ] Back-end Validation.
 
-- [x]  Cookies to save the last selected camera for the user.
+- [ ]  Cookies to save the last selected camera for the user.
 
 - [ ]  Change the "All-Products" page layout to improve the readability for the user when using small screens.
 

@@ -194,7 +194,7 @@
     <h1>Barcode Scanner</h1>
     <div class="btn-location">
     <select id="camera-select">
-        <option value="" >Select a camera</option>
+        <option value="" selected="selected">Select a camera</option>
     </select>
     <button id="scan-button">Scan Barcode</button>
     <button id="all-products-button">All Products</button>
@@ -258,36 +258,16 @@
                     const option = document.createElement('option');
                     option.value = device.deviceId;
                     option.textContent = device.label || `Camera ${cameraSelect.length + 1}`;
-                    console.log(option.value);
-                    // console.log(getCookieCameraID("cameraid"));
-                        if(option.value == getCookieCameraID("cameraid")){
-                            // console.log("I am in!");
-                            option.selected = "selected";
-                            selectedCamID(option);
-                        }
-                        else{
-                            option.selected = false;
-                        }
                     cameraSelect.appendChild(option);
-                    
                 }
             });
         })
         .catch(function(err) {
             console.error("Error accessing media devices: ", err);
         });
-        // This function will will adjust the selectedId and restart Quagga()
-        function selectedCamID(option){
-            selectedCameraId = option.value;
-            if (isQuaggaInitialized) {
-            Quagga.stop();
-            startQuagga();
-        }
-        }
+
     cameraSelect.addEventListener('change', function() {
         selectedCameraId = this.value;
-        createCookie(selectedCameraId); // create a cookie that holds the selected camera ID
-        console.log(document.cookie)
         if (isQuaggaInitialized) {
             Quagga.stop();
             startQuagga();
@@ -304,7 +284,6 @@
 
     function startQuagga() {
         videoContainer.style.display = "block";
-
 
         videoContainer.requestFullscreen?.();
 
@@ -408,45 +387,6 @@
     })
 });
 
-function createCookie(id){
-document.cookie = `cameraid=${id}; path=/;`
-}
-
-// function getCookieCameraID(value){
-//     value = "cameraid";
-//     console.log(`the given value = ${value}`);
-    
-//     const cDecoded = decodeURIComponent(document.cookie);
-//     console.log(`cDecoded = ${cDecoded}`);
-//     const cArray = cDecoded.split(";");
-//     console.log(`cArray = ${cArray}`);
-//     let result = null;
-
-//     cArray.forEach(element => {
-//         if(element.indexOf(value) == 0){
-//             result = element.substring(value.length + 1);
-//         }
-//     })
-//     console.log(`the result = ${result}`);
-//     return result
-// }
-
-function getCookieCameraID(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-    }
-        if (c.indexOf(name) == 0) {
-            // console.log(c.substring(name.length, c.length));
-            return c.substring(name.length, c.length);
-        }
-    }
-return "";
-}
     </script>
 </body>
 </html>
