@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barcode Scanner</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'photos/icone/qr-scan.png' %}">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -189,6 +192,16 @@
         </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 </head>
+<audio  id="passAudio">
+    <source src="{% static 'audio/pass.mp3' %}" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<audio id="failAudio">
+    <source src= "{% static 'audio/fail.wav' %}" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+
+
 <body>
     <h1 class="PalSika">Pal<span class="Sika">Sika</span></h1>
     <h1>Barcode Scanner</h1>
@@ -226,6 +239,7 @@
     </div>
     <div hidden id="code_var"></div>
     <script>
+        
     document.addEventListener('DOMContentLoaded', function() {
     const cameraSelect = document.getElementById('camera-select');
     let selectedCameraId = null;
@@ -347,14 +361,20 @@
                 .then(data => {
                     if (data.error) {
                         // Product not found, show modal with options
+                        var failAudio = document.getElementById('failAudio');
+
                         modalHeaderText.innerText = "Product Not Found";
                         modalMessage.innerHTML = `The scanned product with ID <span class = "code-ID"> ${code} </span> is not registered.`;
                         addProductButton.style.display = "inline-block";  // Show Add Product option
                         editButton.style.display = "none"; // hide the edit button
                         modal.style.display = "block";
                         document.getElementById("code_var").innerHTML = code;
+                        failAudio.play();
                     } else {
                         // Product found, display product details in the modal
+                        var passAudio = document.getElementById('passAudio');
+                        
+
                         modalHeaderText.innerText = data.name;
                         modalMessage.innerHTML = `<p class="customer-price">Customer Price: <span class = "price-background">${data.customer_price}</span></p>
                                                 <p class= "retail-price">Retail Price: ${data.retail_price}</p>
@@ -363,6 +383,7 @@
                         editButton.style.display = "inline-block"
                         modal.style.display = "block";
                         document.getElementById("code_var").innerHTML = code;
+                        passAudio.play();
                     }
                 })
                 .finally(() => {
@@ -376,6 +397,10 @@
     closeModal.addEventListener('click', function() {
         modal.style.display = "none";
     });
+
+
+
+
 
     window.addEventListener('click', function(event) {
         if (event.target === modal) {

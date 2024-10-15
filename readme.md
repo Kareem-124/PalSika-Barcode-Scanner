@@ -292,8 +292,10 @@ Features will be added:
 
 - [ ]  Add delete/edit products at "All-Products" page.
 
-- [ ]  Adding 'beep' sound when scanning products.
+- [x]  Adding 'beep' sound when scanning products.
 
 - [ ] Improving the security for the application to meet the web security standers.
+
+- [x] Creating and adding Favicon.
 
 # Demo (Work In Progress)
