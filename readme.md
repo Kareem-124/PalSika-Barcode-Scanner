@@ -288,14 +288,16 @@ Features will be added:
 
 - [x]  Cookies to save the last selected camera for the user.
 
-- [ ]  Change the "All-Products" page layout to improve the readability for the user when using small screens.
+- [x]  Change the "All-Products" page layout to improve the readability for the user when using small screens.
 
-- [ ]  Add delete/edit products at "All-Products" page.
+- [x]  Add delete/edit products at "All-Products" page.
 
 - [x]  Adding 'beep' sound when scanning products.
 
 - [ ] Improving the security for the application to meet the web security standers.
 
 - [x] Creating and adding Favicon.
+
+- [ ] Try and make it compatible with iphone devices and older android devices.
 
 # Demo (Work In Progress)

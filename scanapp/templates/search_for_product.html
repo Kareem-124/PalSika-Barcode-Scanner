@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+    {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,119 +9,197 @@
 </head>
 <style>
     * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    padding: 20px;
-}
-
-.container {
-    width: 100%;
-    max-width: 1200px;
-    margin: auto;
-    text-align: center;
-}
-
-h1 {
-    margin-bottom: 20px;
-}
-
-.search-bar {
-    margin-bottom: 20px;
-}
-
-.search-bar input {
-    width: 100%;
-    max-width: 400px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.product-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-.product-table th, .product-table td {
-    padding: 12px;
-    text-align: left;
-    border: 1px solid #ddd;
-}
-
-.product-table th {
-    background-color: #ffe32d;
-    color: black;
-}
-
-.product-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.product-table tr:hover {
-    background-color: #ffeb9d;
-}
-
-
-.btn-home{
-    padding: 15px 30px;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 10px;
-            background-color: #ffe32d;
-            color: black;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            text-align: center;
-            width: 20rem;
-}
-.btn-home:hover{
-    background-color: #efae0b;
-}
-a{
-    text-decoration: none;
-    color: black;
-}
-.btn-group{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-/* Responsive styles */
-@media (max-width: 600px) {
-    .search-bar input {
-        width: 100%;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
     }
 
-    .product-table th, .product-table td {
-        font-size: 14px;
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        padding: 20px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: auto;
+        text-align: center;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    .search-bar {
+        margin-bottom: 20px;
+    }
+
+    .search-bar input {
+        width: 100%;
+        max-width: 400px;
         padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
     }
 
     .product-table {
-        font-size: 12px;
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
     }
 
-    .btn-home{
-        width: 10rem;
-        font-size: 12px;
-        padding: 10px 5px;
-        
+    .product-table th, .product-table td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
     }
-}
+
+    .product-table th {
+        background-color: #ffe32d;
+        color: black;
+    }
+
+    .product-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .product-table tr:hover {
+        background-color: #ffeb9d;
+    }
+
+    .btn-home {
+        padding: 15px 30px;
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 10px;
+        background-color: #ffe32d;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-align: center;
+        width: 20rem;
+    }
+
+    .btn-home:hover {
+        background-color: #efae0b;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Card layout */
+    .product-cards {
+        display: none;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .card {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        width: calc(50% - 20px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 200px; /* Ensure minimum height for smaller cards */
+    }
+
+    .card h3 {
+        margin-bottom: 10px;
+    }
+
+    .card p {
+        margin: 5px 0;
+        font-size: 14px;
+    }
+
+    .card-content {
+        flex-grow: 1; /* This ensures the content takes up available space */
+    }
+
+    .card-buttons {
+        margin-top: 15px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .card-button {
+        padding: 10px 15px;
+        font-size: 14px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .edit-btn {
+        background-color: #ffe32d;
+        color: rgb(0, 0, 0);
+        font-size: medium;
+        font-weight: bold;
+    }
+
+    .edit-btn:hover {
+        background-color: #efae0b;
+    }
+
+    .delete-btn {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .delete-btn:hover {
+        background-color: #e41f1f;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 600px) {
+        .product-table {
+            display: none;
+        }
+
+        .product-cards {
+            display: flex;
+        }
+
+        .card {
+            width: calc(50% - 10px); /* Two cards per row */
+        }
+
+        .search-bar input {
+            width: 100%;
+        }
+
+        .btn-home {
+            width: 10rem;
+            font-size: 12px;
+            padding: 10px 5px;
+        }
+        .price-bg{
+            background-color: #ffe32d;
+            font-size: medium;
+            font-weight: bold;
+        }
+    }
 </style>
+
 <body>
     <div class="container">
         <h1>Product List</h1>
@@ -131,6 +210,8 @@ a{
             <button id="home-btn" class="btn-home">Home Page</button>
             <button id="add-product-btn" class="btn-home">Add New Product (+)</button>
         </div>
+
+        <!-- Table for large screens -->
         <table id="product-table" class="product-table">
             <thead>
                 <tr>
@@ -144,7 +225,7 @@ a{
                 </tr>
             </thead>
             <tbody>
-                {%  for product in products%}
+                {%  for product in products %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ product.product_id }}</td>
@@ -157,26 +238,47 @@ a{
                 {% endfor %}
             </tbody>
         </table>
-        
+
+        <!-- Cards for small screens -->
+        <div id="product-cards" class="product-cards">
+            {% for product in products %}
+            <div class="card">
+                <h3>{{ product.name }}</h3>
+                <hr>
+                <!-- <p><strong>ID:</strong> {{ product.product_id }}</p> -->
+                <p><strong>Price:</strong> <span class="price-bg">{{ product.customer_price }}</span></p>
+                <p><strong>Category:</strong> {{ product.category }}</p>
+                <p><strong>Notes:</strong> {{ product.notes }}</p>
+
+                <!-- Edit and Delete buttons -->
+                <div class="card-buttons">
+                    
+                    
+                    <a href="/edit_product_page/{{ product.product_id }}/" class="card-button edit-btn">Edit</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 
     <script>
-        const homeButton = document.getElementById('home-btn')
-        const addNewProductButton = document.getElementById('add-product-btn')
-        
+        const homeButton = document.getElementById('home-btn');
+        const addNewProductButton = document.getElementById('add-product-btn');
 
-        homeButton.addEventListener('click', function(){
-            window.location.href ="/"
-        })
+        homeButton.addEventListener('click', function() {
+            window.location.href = "/";
+        });
 
-        addNewProductButton.addEventListener('click', function(){
-            window.location.href="/add-product_page"
-        })
+        addNewProductButton.addEventListener('click', function() {
+            window.location.href = "/add-product_page";
+        });
+
         function filterTable() {
             const searchInput = document.getElementById('search-input');
             const filter = searchInput.value.toLowerCase();
             const table = document.getElementById('product-table');
             const rows = table.getElementsByTagName('tr');
+            const cards = document.getElementsByClassName('card');
 
             for (let i = 1; i < rows.length; i++) {
                 let visible = false;
@@ -188,8 +290,14 @@ a{
                 }
                 rows[i].style.display = visible ? '' : 'none';
             }
-        }
 
+            // For cards
+            for (let i = 0; i < cards.length; i++) {
+                const card = cards[i];
+                const cardText = card.textContent.toLowerCase();
+                card.style.display = cardText.includes(filter) ? '' : 'none';
+            }
+        }
     </script>
 </body>
 </html>
