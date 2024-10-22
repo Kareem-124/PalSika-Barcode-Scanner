@@ -125,12 +125,13 @@
 
             <div class="form-group">
                 <label for="notes">Notes</label>
-                <textarea id="notes" name="notes" rows="4" >{{ notes }}</textarea>
+                <textarea id="notes" name="notes" rows="4" dir="rtl" >{{ notes }}</textarea>
             </div>
 
             <button type="submit">Edit Product</button>
+            <button type="submit" id="cancel-btn" class="cancel-btn" value="cancel" name="cancel_btn">Cancel</button>
         </form>
-        <a href="/" class="back-link cancel-btn">Cancel</a>
+        <!-- <a href="/" class="back-link cancel-btn">Cancel</a> -->
     </div>
 </body>
 </html>

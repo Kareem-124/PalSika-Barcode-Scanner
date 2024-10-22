@@ -62,6 +62,10 @@ def edit_product_page(request,product_id):
 # Process: Edit the product
 def edit_product_process(request):
     if request.method == 'POST':
+        if request.POST['cancel_btn'] == 'cancel':
+            
+            return redirect('search_for_product_page')
+        
         product_id = request.POST['product_id']
         product = Product.objects.get(product_id=product_id)
         

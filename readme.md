@@ -294,7 +294,7 @@ Features will be added:
 
 - [x]  Adding 'beep' sound when scanning products.
 
-- [ ] Improving the security for the application to meet the web security standers.
+- [x] Improving the security for the application to meet the web security standers.
 
 - [x] Creating and adding Favicon.
 
