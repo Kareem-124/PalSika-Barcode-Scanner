@@ -56,10 +56,16 @@
         border: 1px solid #ddd;
     }
 
+
     .product-table th {
         background-color: #ffe32d;
         color: black;
     }
+
+#Note-th{
+    width: 30%;
+    text-align: center;
+}
 
     .product-table tr:nth-child(even) {
         background-color: #f9f9f9;
@@ -195,11 +201,14 @@
     }
     .text-align-right{
         text-align: right;
-        width: 70%;
+        width: 65%;
+    }
+    .btn-note-width{
+        width: 30%;
     }
 
     /* Responsive styles */
-    @media (max-width: 600px) {
+    @media (max-width: 900px) {
         .product-table {
             display: none;
         }
@@ -250,7 +259,7 @@
                     <th>Customer Price</th>
                     <th>Retail Price</th>
                     <th>Category</th>
-                    <th>Notes</th>
+                    <th id="Note-th">Notes</th>
                 </tr>
             </thead>
             <tbody>
@@ -265,7 +274,7 @@
                     <td id="rowNote">
                         <div id="noteContainer" class="note-display">
                             <div class="note-width text-align-right" dir="rtl">{{ product.notes | linebreaksbr }}</div>
-                            <div class="show" id="Edit{{ forloop.counter }}" data="{{ forloop.counter }}"><a href="/edit_product_page/{{ product.product_id }}/" class="btn-edit">Edit</a></div>
+                            <div class="show Edit-btn-note-width" id="Edit{{ forloop.counter }}" data="{{ forloop.counter }}"><a href="/edit_product_page/{{ product.product_id }}/" class="btn-edit">Edit</a></div>
                         </div>
                         
                     </td>
