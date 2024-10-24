@@ -300,4 +300,16 @@ Features will be added:
 
 - [ ] Try and make it compatible with iphone devices and older android devices.
 
+# Version 1.1.0: Orders System (Work In Progress)
+
+- [ ] A dashboard page that will display a summary of the orders.
+
+- [ ] Create new order page.
+
+- [ ] Burger menu for navigation.
+
+- [ ] Structure data base for the orders and customers.
+
+- [ ] Establish 'Orders Status' logic (Pending , Preparing the Order, Completed, On Hold, Canceled).
+
 # Demo (Work In Progress)

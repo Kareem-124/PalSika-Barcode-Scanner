@@ -82,6 +82,9 @@ def search_for_product_page(request):
     }
     return render(request, 'search_for_product.html',context)
 
+def orders_dashboard_page(request):
+    return render(request,'orders_dashboard.html' )
+
 
 
 # # Process: Delete
