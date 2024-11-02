@@ -223,8 +223,85 @@ def get_top_products_for_current_month():
                     .values('product__name')  # Group by product name
                     .annotate(total_qty=Sum('quantity'), num_orders=Count('order', distinct=True))  # Sum of quantities, count of orders
                     .order_by('-total_qty')[:5])  # Order by total quantity, limit to 5
-    print(f"Product data: {product_data}")
+    
     return product_data
+
+def create_new_order_page(request):
+    products = Product.objects.all()
+    customer_names = Order.objects.values_list('customer_name', flat=True).distinct()
+    
+    context = {
+        'products' : products, 
+        'customer_names' : list(customer_names)
+    }
+    return render(request,'create_new_order_page.html',context)
+
+def create_new_order_process(request):
+    # create_new_order.html
+        if request.method == "POST":
+            count = 1
+            products_list = []
+
+            customer_name = request.POST.get("customer_name")
+            order_type = request.POST.get("order_type", "sell")
+            delivery_date = request.POST.get("delivery_date")
+
+            order = Order.objects.create(
+                customer_name=customer_name,
+                order_type=order_type,
+                delivery_date=delivery_date or None,
+                order_date=timezone.now(),
+                status='pending'
+            )
+            print("I created the order")
+            while(count):
+                try:
+                    data_count = request.POST.get(f"product_{count}")
+                    if data_count == None:
+                        break
+                    
+                    product_id = request.POST.get(f"product_{count}") # Get the ID
+                    quantity = request.POST.get(f"product_qty_{count}") # Get the qty
+                    unit_price = request.POST.get(f"product_price_{count}") # get the price
+                    products_list.append(data_count)
+                    print(f"ID number of the product = {data_count}")
+                    count = count + 1 
+
+                    if product_id and quantity:
+                        product = Product.objects.get(product_id=product_id)
+                        OrderItem.objects.create(
+                            order=order,
+                            product=product,
+                            quantity=int(quantity),
+                            price=float(unit_price)
+                        )
+                    print("I created ORderItem")
+                except:
+                    print("Error: Breaking out of the loop")
+                    break
+
+            # products = products_list
+            # print(f"this is products {products}")
+            # for index, product_data in enumerate(products):
+            #     print("I am in the loop")
+            #     product_id = request.POST.get(f"products[{index}][product_id]")
+            #     quantity = request.POST.get(f"products[{index}][quantity]")
+            #     unit_price = request.POST.get(f"products[{index}][price]")
+
+            #     if product_id and quantity:
+            #         product = Product.objects.get(product_id=product_id)
+            #         OrderItem.objects.create(
+            #             order=order,
+            #             product=product,
+            #             quantity=int(quantity),
+            #             price=float(unit_price)
+            #         )
+            #         print("I created ORderItem")
+
+            return redirect("orders_dashboard_page")  # Redirect to a success page
+
+        return render(request, "create_new_order.html")
+    
 
 # # Process: Delete
 # def remove_order_list(request,order_id):

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Order</title>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+        }
+        .form-container {
+            background-color: #ffe32d;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 700px;
+            margin: 0 auto;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 25px;
+        }
+        input[type="text"], input[type="number"], input[type="date"], select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        label {
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .submit-btn {
+            background-color: #14A44D;
+        }
+        .submit-btn:hover {
+            background-color: #0f8339;
+        }
+        .cancel-btn {
+            background-color: #ff4d4d;
+            margin-top: 15px;
+            color: #fff;
+        }
+        .cancel-btn:hover {
+            background-color: #cc3d3d;
+        }
+        .add-product-btn {
+            font-size: 1rem;
+            color: #ffffff;
+            background-color: #1a73e8;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .add-product-btn:hover {
+            background-color: #0056b3;
+        }
+        .table-container {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        td {
+            text-align: center;
+            color: #333;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+        .close-btn {
+            font-size: 1.5rem;
+            color: #333;
+            float: right;
+            cursor: pointer;
+        }
+        .save-product-btn {
+            background-color: #14A44D;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .save-product-btn:hover {
+            background-color: #0f8339;
+        }
+        .suggestions-box {
+        border: 1px solid #ddd;
+        background-color: white;
+        max-height: 150px;
+        overflow-y: auto;
+        position: absolute;
+        width: calc(100% - 24px);
+        border-radius: 5px;
+        z-index: 100;
+        }
+
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f2f2f2;
+        }
+
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+    text-align: center;
+}
+.form-container {
+    background-color: #ffe32d;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 700px;
+    margin: 0 auto;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+h1 {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 25px;
+}
+input[type="text"], input[type="number"], input[type="date"], select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+label {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+    text-align: left;
+}
+button {
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+.submit-btn {
+    background-color: #14A44D;
+}
+.submit-btn:hover {
+    background-color: #0f8339;
+}
+.cancel-btn {
+    background-color: #ff4d4d;
+    color: #fff;
+    margin-top: 15px;
+}
+.cancel-btn:hover {
+    background-color: #cc3d3d;
+}
+.suggestions-box {
+    border: 1px solid #ddd;
+    background-color: white;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    width: calc(100% - 24px);
+    border-radius: 5px;
+    z-index: 100;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover, .suggestion-item.active {
+    background-color: #f2f2f2;
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Create New Order</h1>
+        <form method="POST" action="{% url 'create_new_order_process' %}">
+            {% csrf_token %}
+    
+            <div class="form-group">
+                <label for="customer_name">Customer Name</label>
+                <input type="text" id="customer_name" name="customer_name" oninput="filterCustomers()" onkeydown="navigateSuggestions(event)" autocomplete="off" required>
+                <div id="customerSuggestions" class="suggestions-box"></div>
+            </div>
+    
+            <div id="available_customers_names" hidden>{{ customer_names }}</div>
+            
+
+            <div class="form-group">
+                <label for="order_type">Order Type</label>
+                <select id="order_type" name="order_type" required>
+                    <option value="sell" selected>Sell</option>
+                    <option value="buy">Buy</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="delivery_date">Delivery Date</label>
+                <input type="date" id="delivery_date" name="delivery_date">
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status" required>
+                    <option value="pending">Pending</option>
+                    <option value="on_hold">On Hold</option>
+                    <option value="completed">Completed</option>
+                    <option value="work_in_progress">Work In Progress</option>
+                    <option value="canceled">Canceled</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Add Products</label>
+                <button type="button" class="add-product-btn" onclick="openModal()">&#43; Add Product</button>
+            </div>
+
+            <div class="table-container">
+                <table id="productTable">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Products will be added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Order</button>
+            <a href="/" class="cancel-btn">Cancel</a>
+        </form>
+    </div>
+
+    <!-- Modal Window -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>Add Product</h2>
+            <label for="modalProductSelect">Product Name</label>
+            <div style="position: relative;">
+                <!-- Search for product -->
+                <input type="text" id="productSearchInput" placeholder="Search Product..." oninput="filterProducts()"> 
+                <select id="modalProductSelect" required size="5" style="width: 100%; margin-top: 5px;">
+                    {% for product in products %}
+
+                    <option id="{{ product.product_id }}" class="" value="{{ product.product_id }}">{{ product.name }}</option>
+                    {% endfor %}
+                </div>
+                    <!-- Options populated by JavaScript -->
+                </select>
+            </div>
+
+            <label for="modalQuantity">Quantity</label>
+            <input type="number" id="modalQuantity" min="1" required>
+
+            <label for="modalUnitPrice">Unit Price</label>
+            <input type="number" id="modalUnitPrice" step="0.01" required>
+
+            <button type="button" class="save-product-btn" onclick="addProduct()">Add Product</button>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        let count = 0;
+function filterProducts() {
+            const input = document.getElementById('productSearchInput').value.toLowerCase();
+            const options = document.getElementById('modalProductSelect').options;
+
+            for (let i = 0; i < options.length; i++) {
+                const option = options[i];
+                const text = option.textContent.toLowerCase();
+                option.style.display = text.includes(input) ? 'block' : 'none';
+            }
+        }
+
+        function openModal() {
+            document.getElementById("productModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("productModal").style.display = "none";
+        }
+
+        function addProduct() {
+            const productId = document.getElementById('modalProductSelect').value;
+            console.log(productId);
+            console.log(count);
+            count++;
+            const productName = document.getElementById('modalProductSelect').selectedOptions[0].text;
+            const quantity = document.getElementById('modalQuantity').value;
+            const unitPrice = document.getElementById('modalUnitPrice').value;
+            const total = (quantity * unitPrice).toFixed(2);
+
+            const tbody = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+            const row = tbody.insertRow();
+
+            row.innerHTML = `
+                <td>${productName}</td>
+                <td>${quantity}</td>
+                <td>${unitPrice}</td>
+                <td>${total}</td>
+                <td><button type="button" onclick="removeProduct(this)">Remove</button></td>
+                <input type="hidden" data-count="${count}" name="product_${count}" value="${productId}">
+                <input type="hidden" name="product_qty_${count}" value="${quantity}">
+                <input type="hidden" name="product_price_${count}" value="${unitPrice}">
+            `;
+
+            closeModal();
+        }
+
+        function removeProduct(button) {
+            const row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        // Customers 
+//         function filterCustomers() {
+//     const input = document.getElementById('customer_name').value.toLowerCase();
+//     const suggestionsBox = document.getElementById('customerSuggestions');
+//     const available_customers_names = document.getElementById('available_customers_names').innerHTML;
+//     console.log(available_customers_names);
+//     let formattedString = available_customers_names.replace(/'/g, '"');
+
+//     // Step 2: Parse the formatted string into an array
+//     let customers = JSON.parse(formattedString);
+
+//     console.log(customers);
+//     const maxSuggestions = 5;
+
+//     suggestionsBox.innerHTML = '';  // Clear previous suggestions
+//     let count = 0;
+//         customers.forEach(customer => {
+//             const customerName = customer.toLowerCase();
+//             if (customerName.includes(input) && count < maxSuggestions) {
+//                 const suggestionItem = document.createElement('div');
+//                 suggestionItem.classList.add('suggestion-item');
+//                 suggestionItem.textContent = customer;
+
+//                 // Click event to select customer
+//                 suggestionItem.onclick = function () {
+//                     document.getElementById('customer_name').value = customer;
+//                     suggestionsBox.innerHTML = ''; // Clear suggestions after selection
+//                 };
+
+//                 suggestionsBox.appendChild(suggestionItem);
+//                 count++;
+//             }
+//         });
+
+// }
+
+let currentSuggestionIndex = -1;
+
+function filterCustomers() {
+    const input = document.getElementById('customer_name').value.toLowerCase();
+    const suggestionsBox = document.getElementById('customerSuggestions');
+
+    let available_customers_names = document.getElementById('available_customers_names').textContent;
+    let formattedString = available_customers_names.replace(/'/g, '"');
+    let customers = JSON.parse(formattedString);
+
+    suggestionsBox.innerHTML = '';
+
+    if (input.trim() === '') {
+        suggestionsBox.style.display = 'none';
+        return;
+    }
+
+    const matches = customers.filter(name => name.toLowerCase().includes(input)).slice(0, 5);
+
+    if (matches.length > 0) {
+        matches.forEach((name, index) => {
+            const suggestionItem = document.createElement('div');
+            suggestionItem.classList.add('suggestion-item');
+            suggestionItem.textContent = name;
+
+            if (index === currentSuggestionIndex) {
+                suggestionItem.classList.add('active');
+            }
+
+            suggestionItem.onclick = () => selectSuggestion(name);
+            suggestionsBox.appendChild(suggestionItem);
+        });
+        currentSuggestionIndex = -1;
+        suggestionsBox.style.display = 'block';
+    } else {
+        suggestionsBox.style.display = 'none';
+    }
+}
+
+
+function navigateSuggestions(event) {
+    const suggestionsBox = document.getElementById('customerSuggestions');
+    const suggestions = suggestionsBox.getElementsByClassName('suggestion-item');
+
+    if (suggestions.length === 0) return;
+
+    if (event.key === 'ArrowDown' || (event.key === 'Tab' && !event.shiftKey)) {
+        event.preventDefault();
+        currentSuggestionIndex = (currentSuggestionIndex + 1) % suggestions.length;
+        updateActiveSuggestion(suggestions);
+    } else if (event.key === 'ArrowUp' || (event.key === 'Tab' && event.shiftKey)) {
+        event.preventDefault();
+        currentSuggestionIndex = (currentSuggestionIndex - 1 + suggestions.length) % suggestions.length;
+        updateActiveSuggestion(suggestions);
+    } else if (event.key === 'Enter') {
+        event.preventDefault();
+        if (currentSuggestionIndex >= 0 && currentSuggestionIndex < suggestions.length) {
+            selectSuggestion(suggestions[currentSuggestionIndex].textContent);
+        }
+    }
+}
+
+function updateActiveSuggestion(suggestions) {
+    for (let i = 0; i < suggestions.length; i++) {
+        suggestions[i].classList.toggle('active', i === currentSuggestionIndex);
+    }
+}
+
+function highlightSuggestion(suggestions) {
+    for (let i = 0; i < suggestions.length; i++) {
+        suggestions[i].classList.remove('active');
+    }
+    if (currentSuggestionIndex >= 0) {
+        suggestions[currentSuggestionIndex].classList.add('active');
+    }
+}
+
+function selectSuggestion(name) {
+    document.getElementById('customer_name').value = name;
+    document.getElementById('customerSuggestions').style.display = 'none';
+    currentSuggestionIndex = -1;
+}
+
+document.addEventListener('click', function(event) {
+    const suggestionsBox = document.getElementById('customerSuggestions');
+    if (!suggestionsBox.contains(event.target) && event.target !== document.getElementById('customer_name')) {
+        suggestionsBox.style.display = 'none';
+    }
+});
+
+    </script>
+</body>
+</html>

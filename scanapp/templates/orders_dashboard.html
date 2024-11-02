@@ -10,16 +10,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <style>
         /* Style for the sidebar */
-        #sidebar {
-            width: 250px;
-            height: 100vh;
-            background-color: #f8f9fa;
-            position: fixed;
-            top: 0;
-            left: 0;
-            transition: all 0.3s;
-            padding-top: 20px;
-        }
 
         /* Content area when the sidebar is visible */
         #main-content {
@@ -27,6 +17,7 @@
             transition: all 0.3s;
             padding: 20px;
             width: 75%;
+            box-shadow: 7px 7px 10px 6px rgb(211, 211, 211);
         }
 
         /* Hidden state of the sidebar */
@@ -119,7 +110,7 @@
                 <a href="#" class="mb-1 pb-1">Show More</a>
                 
             </div>
-            <div class="vr vr-blurry" style="height: 250px;"></div>
+            <div class="vr vr-blurry" style="height: 350px; margin-left: 20px; margin-right: 20px;"></div>
             <!-- Middle Section : Right  -->
             <div class="border-blue flex-fill w-66">
                 <div class="d-flex flex-column align-items-center">
@@ -127,8 +118,8 @@
                         <h4 class="mb-0 mt-2 border-black fw-bold flex-fill ">Top 5 Products This Month</h4>
                         <hr class="bg-danger border-2 border-top border-danger mt-0 " style="height: 3px; width: 100%;">
                     </div>
-                    <table class="table table-striped table-hover mt-0 h-80" dir="rtl">
-                        <thead>
+                    <table class="table mt-0 h-80 " dir="rtl">
+                        <thead id="thead">
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Product Name</th>
@@ -138,7 +129,7 @@
                         </thead>
                         <tbody>
                             {% for product in top_products_for_current_month %}
-                            <tr>
+                            <tr class="td-hover">
                                 <th scope="row">{{ forloop.counter }}</th> <!-- Auto increments row number -->
                                 <td>{{ product.product__name }}</td>
                                 <td>{{ product.num_orders }}</td>
@@ -161,14 +152,7 @@
         <!-- Lower Section -->
         <div class="container d-flex border-green mt-3">
             <div class=" border-blue d-flex justify-content-around flex-fill">
-                <button class="btn btn-warning">Add Order</button>
-                <button class="btn btn-warning">Button 2</button>
-            </div>
-        </div>
-        
-        <div class="container d-flex border-green mt-3">
-            <div class=" border-blue d-flex justify-content-around flex-fill">
-                <button class="btn btn-warning">Add Order</button>
+                <a href="/create_new_order_page" class="btn btn-warning">Add Order</a>
                 <button class="btn btn-warning">Button 2</button>
             </div>
         </div>

@@ -1,0 +1,101 @@
+/* 
+
+.border-black{
+    border: 1px black solid;
+}
+
+
+.border-red{
+    border: 1px red solid;
+}
+
+
+.border-blue{
+    border: 1px blue solid;
+}
+
+
+.border-green{
+    border: 1px green solid;
+} */
+
+/* Table alignment*/
+td {
+    text-align: center;
+    }
+
+ /* Center the chart */
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+/* Circle with different segments */
+.progress-ring {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 10px solid #f0f0f0;
+    position: relative;
+}
+
+/* Center text inside the circle */
+.progress-ring .center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    text-align: center;
+}
+
+/* Labels around the circle */
+.status-label {
+    position: absolute;
+    font-size: 14px;
+}
+
+.status-label.completed {
+    top: 10%;
+    left: -80px;
+}
+
+.status-label.pending {
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.status-label.wip {
+    bottom: 40%;
+    right: -100px;
+}
+
+.status-label.on-hold {
+    bottom: 10%;
+    right: 0;
+}
+
+.status-label.canceled {
+    bottom: 10%;
+    left: -80px;
+}
+
+.w-33{
+    width: 33.3%;
+}
+
+.w-66{
+    width: 66%;
+}
+
+.h-80{
+    height: 80%;
+}
+
+.h-10{
+    height: 10%;
+}

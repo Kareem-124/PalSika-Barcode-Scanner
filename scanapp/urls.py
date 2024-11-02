@@ -11,5 +11,7 @@ urlpatterns = [
     path('edit_product_process/', views.edit_product_process, name='edit_product_process'),
     path('search_for_product_page/', views.search_for_product_page, name='search_for_product_page'),
     path('orders_dashboard_page/', views.orders_dashboard_page, name='orders_dashboard_page'),
+    path('create_new_order_page/', views.create_new_order_page, name='create_new_order_page'),
+    path('create_new_order_process/', views.create_new_order_process, name='create_new_order_process'),
 
 ]

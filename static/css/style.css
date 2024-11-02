@@ -1,101 +1,145 @@
-/* 
-
-.border-black{
-    border: 1px black solid;
+/* PalSika Theme Colors */
+:root {
+    --primary-color: #072565; /* PalSika Blue */
+    --secondary-color: #ffe32d; /* PalSika Yellow */
+    --table-bg-color: #fff0b2; 
+    --background-color: white;
+    --background-color2: #f8f9fa;
+    --text-color: #333333;
+    --border-color: #072565;
+}
+body{
+    background-color: var(--background-color2);
+}
+/* Sidebar */
+#sidebar {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding-top: 20px;
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: all 0.3s;
+    padding-top: 20px;
+    box-shadow: 5px 5px 5px 3px rgb(211, 211, 211);
 }
 
 
-.border-red{
-    border: 1px red solid;
+#sidebar h5 {
+    color: var(--secondary-color);
 }
 
-
-.border-blue{
-    border: 1px blue solid;
+#sidebar a.nav-link {
+    color: var(--secondary-color);
+    font-weight: 500;
 }
 
+#sidebar a.nav-link:hover {
+    color: var(--primary-color);
+    background-color: var(--background-color2);
+}
 
-.border-green{
-    border: 1px green solid;
-} */
+/* Toggle button */
+.toggle-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
 
-/* Table alignment*/
-td {
+.toggle-btn.hidden {
+    background-color: var(--secondary-color);
+}
+
+/* Main Content */
+#main-content {
+    background-color: var(--background-color);
+    padding: 20px;
+    border-radius: 5px;
+}
+
+h4 {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.fs-4 {
+    color: var(--text-color);
+}
+
+/* Progress Circle Style */
+canvas {
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+}
+
+/* Table Styling */
+.table {
+    border: 1px solid var(--border-color);
+}
+
+.table th, .table td {
     text-align: center;
+    vertical-align: middle;
+}
+
+.table thead{
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+#thead{
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+
+tr:nth-of-type(odd) {
+    
+}
+
+tr:nth-of-type(even) {
+    background-color: white;
+}
+
+.td-hover:hover{
+    background-color: #ffeb9d;
+}
+
+/* Buttons */
+button {
+    background-color: var(--secondary-color);
+    color: white;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: var(--primary-color);
+}
+
+/* Separator */
+hr.bg-danger {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* Vertical Divider */
+.vr-blurry {
+    border-left: 2px solid var(--primary-color);
+    opacity: 0.8;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    #main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .w-33, .w-66 {
+        width: 100%;
     }
 
- /* Center the chart */
-.chart-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    position: relative;
-}
-
-/* Circle with different segments */
-.progress-ring {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    border: 10px solid #f0f0f0;
-    position: relative;
-}
-
-/* Center text inside the circle */
-.progress-ring .center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2rem;
-    text-align: center;
-}
-
-/* Labels around the circle */
-.status-label {
-    position: absolute;
-    font-size: 14px;
-}
-
-.status-label.completed {
-    top: 10%;
-    left: -80px;
-}
-
-.status-label.pending {
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.status-label.wip {
-    bottom: 40%;
-    right: -100px;
-}
-
-.status-label.on-hold {
-    bottom: 10%;
-    right: 0;
-}
-
-.status-label.canceled {
-    bottom: 10%;
-    left: -80px;
-}
-
-.w-33{
-    width: 33.3%;
-}
-
-.w-66{
-    width: 66%;
-}
-
-.h-80{
-    height: 80%;
-}
-
-.h-10{
-    height: 10%;
+    .d-flex {
+        flex-direction: column;
+    }
 }
