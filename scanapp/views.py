@@ -174,7 +174,7 @@ def get_orders_for_today():
         all_statuses[status['status']] = status['count']
 
     # Get the first 5 customer names
-    first_five_customers = orders.values_list('customer_name', flat=True)[:5]
+    first_five_customers = orders.values_list('customer__name', flat=True).distinct()[:5]
     
     return {
         'first_five_customers' : first_five_customers, 
@@ -228,13 +228,13 @@ def get_top_products_for_current_month():
 
 def create_new_order_page(request):
     products = Product.objects.all()
-    customer_names = Order.objects.values_list('customer_name', flat=True).distinct()
+    customer_names = Customer.objects.values_list('name', flat=True).distinct()
     
     context = {
-        'products' : products, 
-        'customer_names' : list(customer_names)
+        'products': products,
+        'customer_names': list(customer_names)
     }
-    return render(request,'create_new_order_page.html',context)
+    return render(request, 'create_new_order_page.html', context)
 
 def create_new_order_process(request):
     # create_new_order.html
@@ -245,28 +245,37 @@ def create_new_order_process(request):
             customer_name = request.POST.get("customer_name")
             order_type = request.POST.get("order_type", "sell")
             delivery_date = request.POST.get("delivery_date")
+            status = request.POST.get("status")
 
+            # Retrieve or create the Customer instance
+            customer, created = Customer.objects.get_or_create(name=customer_name)
+
+            # Create the Order with the Customer foreign key
             order = Order.objects.create(
-                customer_name=customer_name,
+                customer=customer,
                 order_type=order_type,
                 delivery_date=delivery_date or None,
                 order_date=timezone.now(),
-                status='pending'
+                status=status
             )
-            print("I created the order")
-            while(count):
+            print("Order created")
+            
+            # Loop to retrieve products dynamically
+            while True:
                 try:
                     data_count = request.POST.get(f"product_{count}")
-                    if data_count == None:
-                        break
+                    if data_count is None:
+                        break # Stop the loop if no more products
                     
+                    # Retrieve product ID, quantity, and unit price
                     product_id = request.POST.get(f"product_{count}") # Get the ID
                     quantity = request.POST.get(f"product_qty_{count}") # Get the qty
                     unit_price = request.POST.get(f"product_price_{count}") # get the price
                     products_list.append(data_count)
-                    print(f"ID number of the product = {data_count}")
-                    count = count + 1 
+                    print(f"Product ID: {data_count}")
+                    count += 1 
 
+                    # Create OrderItem if product and quantity exist
                     if product_id and quantity:
                         product = Product.objects.get(product_id=product_id)
                         OrderItem.objects.create(
@@ -275,9 +284,9 @@ def create_new_order_process(request):
                             quantity=int(quantity),
                             price=float(unit_price)
                         )
-                    print("I created ORderItem")
-                except:
-                    print("Error: Breaking out of the loop")
+                    print("OrderItem created")
+                except Exception as e:
+                    print(f"Error: {e}, Breaking out of the loop")
                     break
 
             # products = products_list

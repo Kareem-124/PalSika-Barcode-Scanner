@@ -9,6 +9,18 @@ class Product(models.Model):
     category = models.CharField(max_length=100, default='N/A')  # New field
     display = models.BooleanField(default=True)
 
+class Customer(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(blank=True, null=True)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+    display = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return self.name
+
+
 # Orders Table
 class Order(models.Model):
     ORDER_STATUS_CHOICES = [
@@ -25,7 +37,7 @@ class Order(models.Model):
     ]
     
     order_type = models.CharField(max_length=10, choices=ORDER_TYPE_CHOICES, default='SELLER')
-    customer_name = models.CharField(max_length=255)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders', null=True)
     order_date = models.DateField(auto_now_add=True)
     delivery_date = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='pending')
