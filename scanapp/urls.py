@@ -13,5 +13,7 @@ urlpatterns = [
     path('orders_dashboard_page/', views.orders_dashboard_page, name='orders_dashboard_page'),
     path('create_new_order_page/', views.create_new_order_page, name='create_new_order_page'),
     path('create_new_order_process/', views.create_new_order_process, name='create_new_order_process'),
+    path('orders_page/', views.orders_page, name='orders_page'),
+    path('order_page_products_request/<str:orderID>/', views.order_page_products_request, name='order_page_products_request'),
 
 ]

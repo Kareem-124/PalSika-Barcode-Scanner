@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Order, OrderItem, OrderHistory, Customer
+from .models import *
 
 # Product Admin
 @admin.register(Product)
@@ -49,3 +49,19 @@ class OrderItemAdmin(admin.ModelAdmin):
     search_fields = ('order__customer__name', 'product__name')
     list_filter = ('display',)
     ordering = ('order',)
+
+# Delivery Admin
+@admin.register(Delivery)
+class DeliveryAdmin(admin.ModelAdmin):
+    list_display = ('driver_name', 'driver_phone', 'driver_city_line', 'created_date', 'updated_date')
+    search_fields = ('driver_name', 'driver_phone', 'driver_city_line')
+    list_filter = ('created_date', 'updated_date')
+    ordering = ('driver_name',)
+
+# Order Card Admin
+@admin.register(OrderCard)
+class OrderCardAdmin(admin.ModelAdmin):
+    list_display = ('order', 'delivery', 'total_discount','net_price','created_date', 'updated_date')
+    search_fields = ('order__customer__name', 'delivery__driver_name')  # Assuming `Order` is linked to `Customer`
+    list_filter = ('created_date', 'updated_date')
+    ordering = ('-created_date',)

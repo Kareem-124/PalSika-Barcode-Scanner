@@ -9,6 +9,9 @@ class Product(models.Model):
     category = models.CharField(max_length=100, default='N/A')  # New field
     display = models.BooleanField(default=True)
 
+    def __str__(self):
+        return f"{self.name} ({self.product_id})"
+
 class Customer(models.Model):
     name = models.CharField(max_length=255, unique=True)
     email = models.EmailField(blank=True, null=True)
@@ -45,6 +48,9 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"Order for {self.customer.name} / Delivery: {self.delivery_date}"
+
 # Order Items Table
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
@@ -53,6 +59,7 @@ class OrderItem(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     display = models.BooleanField(default=True)
 
+
 # Order History Table
 class OrderHistory(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='history')
@@ -60,6 +67,32 @@ class OrderHistory(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     display = models.BooleanField(default=True)
 
+# Delivery Table for delivery-specific information
+class Delivery(models.Model):
+    driver_name = models.CharField(max_length=100)
+    driver_phone = models.CharField(max_length=20)
+    driver_city_line = models.CharField(max_length=100)
+    notes = models.TextField(blank=True, null=True)
+    created_date = models.DateField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
     def __str__(self):
-        return f"{self.name} ({self.product_id})"
+        return self.driver_name
+
+# Order Card Table to centralize order information for each card
+class OrderCard(models.Model):
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name="order_card")
+    delivery = models.ForeignKey(Delivery, on_delete=models.SET_NULL, null=True)
+    total_discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    net_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    order_notes = models.TextField(blank=True, null=True)
+    
+    # Convenience fields for easily accessing data on each card
+    created_date = models.DateField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"OrderCard for {self.order}"
+
+
     

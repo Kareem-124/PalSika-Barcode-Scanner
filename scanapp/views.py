@@ -312,6 +312,34 @@ def create_new_order_process(request):
         return render(request, "create_new_order.html")
     
 
+
+def orders_page(request):
+    orders_cards = OrderCard.objects.select_related('order', 'delivery', 'order__customer').all()
+    print (orders_cards)
+    context = {
+        'orders_cards': orders_cards
+    }
+    return render(request, 'orders_page.html', context)
+
+def order_page_products_request(request, orderID):
+    order = Order.objects.get(id= orderID)
+    order_items = OrderItem.objects.filter(order=order)
+    print(order_items)
+    test = []
+    for item in order_items:
+        product_info = {
+            'product_id': item.product.product_id,
+            'product_name': item.product.name,
+            'quantity': item.quantity,
+            'price': str(item.price),  # Convert Decimal to string for JSON serialization
+        }
+        test.append(product_info)
+    table_id = "table_" + orderID
+    data = {
+        'products' : test,
+        'table_id' : table_id,
+    }
+    return JsonResponse(data)
 # # Process: Delete
 # def remove_order_list(request,order_id):
 #     order_list = Order_list.objects.get(id=order_id)
