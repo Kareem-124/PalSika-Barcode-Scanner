@@ -312,15 +312,16 @@ def create_new_order_process(request):
         return render(request, "create_new_order.html")
     
 
-
+# Pager: orders_page displays all opened order cards 
 def orders_page(request):
-    orders_cards = OrderCard.objects.select_related('order', 'delivery', 'order__customer').all()
-    print (orders_cards)
+    orders_cards = OrderCard.objects.select_related('order', 'delivery', 'order__customer').order_by('-order__delivery_date')
+    
     context = {
         'orders_cards': orders_cards
     }
     return render(request, 'orders_page.html', context)
 
+# This section is responsible for providing the products for each card in orders_page it uses Ajax for this operation.
 def order_page_products_request(request, orderID):
     order = Order.objects.get(id= orderID)
     order_items = OrderItem.objects.filter(order=order)
