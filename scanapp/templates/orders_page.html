@@ -16,60 +16,108 @@
         <input type="text" id="searchInput" class="form-control" placeholder="Search orders by ID or customer name..." onkeyup="searchOrders()">
 
         <!-- Tab Navigation -->
-        <ul class="nav nav-tabs mt-4" id="orderStatusTabs" role="tablist">
+        <ul class="nav nav-tabs mt-4 " id="orderStatusTabs" role="tablist">
             <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="all-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('all')">All</a>
+                <a class="nav-link active yellow " id="all-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('all')">All</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="pending-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('pending')">Pending</a>
+                <a class="nav-link yellow" id="pending-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('pending')">Pending</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="wip-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('work_in_progress')">WIP</a>
+                <a class="nav-link yellow" id="wip-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('work_in_progress')">WIP</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="on-hold-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('on_hold')">On Hold</a>
+                <a class="nav-link yellow" id="on-hold-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('on_hold')">On Hold</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="completed-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('completed')">Completed</a>
+                <a class="nav-link yellow" id="completed-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('completed')">Completed</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="canceled-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('canceled')">Canceled</a>
+                <a class="nav-link yellow" id="canceled-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('canceled')">Canceled</a>
             </li>
         </ul>
 
         <div class="orders-list mt-4">
             {% for card in orders_cards %}
-            <div class="order-card mt-4" data-status="{{ card.order.status }}" data-id="{{ card.order.id }}" data-customer="{{ card.order.customer.name | lower }}">
-                <div class="order-header">
-                    <h2>Order ID: {{ card.order.id }}</h2>
-                    <p>Status: {{ card.order.status }}</p>
-                </div>
-                <div class="order-body">
-                    <p>Customer: {{ card.order.customer.name }}</p>
-                    <p>Delivery Date: {{ card.order.delivery_date }}</p>
-                </div>
-                <div class="order-footer">
-                    <button class="details-btn" id="{{ forloop.counter }}" data-orderID="{{ card.order.id }}" onclick="get_ordered_products(this)" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ card.order.id }}" aria-expanded="false" aria-controls="collapseExample">View Details</button>
-                </div>
-                <div class="collapse mt-3" id="collapseExample{{ card.order.id }}">
-                    <table class="product-table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Product Name</th>
-                                <th>Quantity</th>
-                                <th>Price/Unit</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table_{{ card.order.id}}">
-                            <tr>
-                                <td>1</td>
-                                <td>Example Product</td>
-                                <td>3</td>
-                                <td>$10.00</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="order-card mt-4 d-flex" data-status="{{ card.order.status }}" data-id="{{ card.order.id }}" data-customer="{{ card.order.customer.name | lower }}">
+                
+                {% if card.order.status == "pending"%}
+                <div class="vl-2-pending"></div>
+                {% elif card.order.status == "work_in_progress" %}
+                <div class="vl-2-wip"></div>
+                {% elif card.order.status == "on_hold" %}
+                <div class="vl-2-on-hold"></div>
+                {% elif card.order.status == "canceled" %}
+                <div class="vl-2-canceled"></div>
+                {% elif card.order.status == "completed" %}
+                <div class="vl-2-completed"></div>
+                {% endif %}
+                <div class="flex-fill">
+
+
+                
+                    <div class="order-header d-flex">
+                        <div class="order-header">
+                            <h2 class="mb-1 yellow">Order ID:<span class="text-dark"> {{ card.order.id }}</span>
+                                <!-- Edit Order -->
+                                <button class="btn" title="Edit Order" data-id="{{ card.order.id }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" data-id="{{ card.order.id }}">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                    </svg>
+                                </button>  
+                            </h2>
+
+                            <p>Status:<span class="fw-bold"> {{ card.order.status }}</span></p>
+                            <p>Customer:<span class="fw-bold"> {{ card.order.customer.name }}</span></p>
+                            <p>Delivery Date:<span class="fw-bold"> {{ card.order.delivery_date }}</span></p>
+                        </div>
+                        <div class="vl"></div>
+                            <!-- Driver Name Section -->
+                        <div class="order-header">
+                            <h2 class="mb-1 yellow">Delivery Name: <span class="text-dark"> {{ card.delivery.driver_name }}</span>
+                            <button class="btn" title = "Change Driver">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-credit-card-2-front-fill" viewBox="0 0 16 16">
+                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
+                                </svg>
+                            </button>
+                            </h2>
+                            <p>Line:<span class="fw-bold"> {{ card.delivery.driver_city_line }}</span></p>
+                            <p>Phone:<span class="fw-bold"> {{ card.delivery.driver_phone }}</span></p>
+                        </div>
+
+                    
+                    </div>
+                
+                    <hr>
+                    <!-- <div class="order-body">
+                        <p>Customer: {{ card.order.customer.name }}</p>
+                        <p>Delivery Date: {{ card.order.delivery_date }}</p>
+                    </div> -->
+                    
+                    <div class="order-footer">
+                        <button class="details-btn yellow-bg-btn fw-bold" id="{{ forloop.counter }}" data-orderID="{{ card.order.id }}" onclick="get_ordered_products(this)" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ card.order.id }}" aria-expanded="false" aria-controls="collapseExample">View Details</button>
+                    </div>
+                    <div class="collapse mt-3" id="collapseExample{{ card.order.id }}">
+                        <table class="product-table">
+                            <thead>
+                                <tr class="table-header">
+                                    <th>#</th>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Price/Unit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table_{{ card.order.id}}">
+                                <tr>
+                                    <td>1</td>
+                                    <td>Example Product</td>
+                                    <td>3</td>
+                                    <td>$10.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             {% endfor %}
@@ -77,17 +125,25 @@
     </div>
 
     <script>
-        function filterOrders(status) {
-            const orderCards = document.querySelectorAll('.order-card');
-            orderCards.forEach(card => {
-                const cardStatus = card.getAttribute('data-status');
-                if (status === 'all' || cardStatus === status) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+// Tabs filtering section
+function filterOrders(status) {
+    // Select all order cards
+    const orderCards = document.querySelectorAll('.order-card');
+
+    // Loop through each card to apply the appropriate visibility
+    orderCards.forEach(card => {
+        const cardStatus = card.getAttribute('data-status');
+
+        // Check if the card's status matches the selected filter
+        if (status === 'all' || cardStatus === status) {
+            card.classList.remove('d-none'); // Show card by removing 'd-none'
+            card.classList.add('d-flex');    // Ensure 'd-flex' is added
+        } else {
+            card.classList.remove('d-flex'); // Hide card by removing 'd-flex'
+            card.classList.add('d-none');    // Ensure 'd-none' is added
         }
+    });
+}
 
         function searchOrders() {
             const input = document.getElementById('searchInput').value.toLowerCase();
@@ -98,9 +154,11 @@
                 const customerName = card.getAttribute('data-customer');
 
                 if (orderId.includes(input) || customerName.includes(input)) {
-                    card.style.display = 'block';
+                    card.classList.remove('d-none'); // Show card by removing 'd-none'
+                    card.classList.add('d-flex');    // Ensure 'd-flex' is added
                 } else {
-                    card.style.display = 'none';
+                    card.classList.remove('d-flex'); // Hide card by removing 'd-flex'
+                    card.classList.add('d-none');    // Ensure 'd-none' is added
                 }
             });
         }
@@ -139,6 +197,10 @@
                     } else {
                         productList.textContent = 'No products found for this order.';
                     }
+                    
+                                    // Scroll to the element's position after populating the table
+                const detailsSection = document.getElementById(`collapseExample${orderId}`);
+                detailsSection.scrollIntoView({ behavior: 'smooth', block:"center" });
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);

@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-color: #f4f4f9 !important;
     margin: 0;
     padding: 0;
 }
@@ -33,7 +33,9 @@ h1 {
 }
 
 .order-card:hover {
-    transform: scale(1.02);
+    /* transform: scale(1.01); */
+    box-shadow: 0px 4px 8px #ffdf5f;
+
 }
 
 .order-header h2 {
@@ -71,7 +73,7 @@ h1 {
 }
 
 .product-table thead th {
-    background-color: #f2f2f2;
+    /* background-color: #f2f2f2; */
     color: #333;
     text-align: left;
     padding: 12px;
@@ -92,4 +94,86 @@ h1 {
 
 .product-table tbody tr:hover {
     background-color: #f1f1f1;
+}
+
+.vl {
+    background: linear-gradient(#ffff80, #ead5ac);
+    width: 0.125rem;
+    height: 6rem;
+    margin-left: 2.5rem;
+    margin-right: 2rem;
+}
+.vl-2 {
+    background: linear-gradient(#ffff80, #ead5ac);
+    width: 1rem;
+    height: 10rem;
+    margin-left: 0rem;
+    margin-right: 2rem;
+    
+}
+.vl-2-pending {
+    background: linear-gradient(#fee8a5, #ead5ac);
+    width: 1rem;
+    height: 10rem;
+    margin-left: 0rem;
+    margin-right: 2rem;
+    
+}
+
+.vl-2-wip {
+    background: linear-gradient(#17A2B8, #ccf4ed);
+    width: 1rem;
+    height: 10rem;
+    margin-left: 0rem;
+    margin-right: 2rem;
+    
+}
+.vl-2-on-hold {
+    background: linear-gradient(#FF9800, #b46840);
+    width: 1rem;
+    height: 10rem;
+    margin-left: 0rem;
+    margin-right: 2rem;
+    
+}
+.vl-2-canceled {
+    background: linear-gradient(#DC3545, #fab6b6);
+    width: 1rem;
+    height: 10rem;
+    margin-left: 0rem;
+    margin-right: 2rem;
+    
+}
+.vl-2-completed {
+    background: linear-gradient(#28A745, #c6fed9);
+    width: 1rem;
+    height: 10rem;
+    margin-left: 0rem;
+    margin-right: 2rem;
+    
+}
+
+.yellow{
+    color: #e1b31c   !important;
+}
+.yellow-bg-btn{
+    background-color: #ffdf5f !important;
+    color: black;
+}
+.yellow-bg-btn:hover{
+    background-color: #ffeb9d !important;
+}
+
+.active{
+    color: #555 !important;
+}
+
+.table-header{
+    background-color: #ffdf5f !important;
+    color: black;
+}
+
+h2 .btn:hover {
+    color: #e1b31c;
+
 }
