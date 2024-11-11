@@ -177,3 +177,94 @@ h2 .btn:hover {
     color: #e1b31c;
 
 }
+
+/* Modal Background */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    text-align: left;
+    color: #333;
+}
+
+/* Close Button */
+.close-btn {
+    font-size: 20px;
+    color: #999;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+}
+
+/* Modal Header */
+.modal-content h2 {
+    color: #ffba00; /* Match with yellow theme */
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Labels */
+.modal-content label {
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: bold;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+/* Input Styles */
+.modal-content input[type="text"],
+.modal-content input[type="number"],
+.modal-content select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.modal-content input::placeholder {
+    color: #aaa;
+}
+
+/* Save Product Button */
+.save-product-btn {
+    background-color: #ffba00;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 15px;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.save-product-btn:hover {
+    background-color: #e0a800;
+}
