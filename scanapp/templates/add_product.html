@@ -96,11 +96,11 @@
 <body>
     <div class="form-container">
         <h1>Add New Product</h1>
-        <form method="POST" action="{% url 'add_product' %}">
+        <form method="POST" action="{% url 'add_product' %}" >
             {% csrf_token %}
-            <div class="form-group">
-                <label for="product_id">Product ID</label>
-                <input type="text" id="product_id" name="product_id" value="{{ product_id }}">
+            <div class="form-group" >
+                <label for="product_id" >Product ID</label>
+                <input type="text" id="product_id" name="product_id" value="{{ product_id }}" >
             </div>
 
             <div class="form-group">

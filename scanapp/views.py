@@ -374,6 +374,13 @@ def order_page_assign_new_driver(request):
     }
     print(response_data)
     return JsonResponse(response_data)
+
+
+def create_new_driver_page(request):
+    return render(request, "create_new_driver_page.html")
+
+def add_driver_process(request):
+    pass
 # # Process: Delete
 # def remove_order_list(request,order_id):
 #     order_list = Order_list.objects.get(id=order_id)
