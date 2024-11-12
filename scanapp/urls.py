@@ -15,5 +15,6 @@ urlpatterns = [
     path('create_new_order_process/', views.create_new_order_process, name='create_new_order_process'),
     path('orders_page/', views.orders_page, name='orders_page'),
     path('order_page_products_request/<str:orderID>/', views.order_page_products_request, name='order_page_products_request'),
+    path('order_page_assign_new_driver/', views.order_page_assign_new_driver, name='order_page_assign_new_driver'),
 
 ]

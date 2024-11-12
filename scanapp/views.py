@@ -5,10 +5,10 @@ from django.db.models import Count
 import datetime
 from django.utils.timezone import now
 from django.utils import timezone
-
 from django.db.models import Sum, Count
 from datetime import timedelta
-
+from django.shortcuts import get_object_or_404
+import json
 
 def index(request):
     return render(request, 'index.html')
@@ -315,9 +315,11 @@ def create_new_order_process(request):
 # Pager: orders_page displays all opened order cards 
 def orders_page(request):
     orders_cards = OrderCard.objects.select_related('order', 'delivery', 'order__customer').order_by('-order__delivery_date')
+    delivery = Delivery.objects.all()
     
     context = {
-        'orders_cards': orders_cards
+        'orders_cards': orders_cards,
+        'delivery': delivery,
     }
     return render(request, 'orders_page.html', context)
 
@@ -341,6 +343,37 @@ def order_page_products_request(request, orderID):
         'table_id' : table_id,
     }
     return JsonResponse(data)
+
+
+# Process: Change the assigned driver for the order in order card
+def order_page_assign_new_driver(request):
+    if request.method == 'POST':
+        '''
+        Django expects data in request.POST when using application/json content-type.
+        Django’s request.POST dictionary only works with application/x-www-form-urlencoded or multipart/form-data, so
+        when using application/json, you need to parse the JSON data from the request body manually.
+        '''
+        data = json.loads(request.body)
+        cardID = data.get("cardID")
+        newDriverID = data.get("newDriverID")
+        
+        # print(f"CardID: {cardID} / NewDriverID: {newDriverID}")
+        # Get card and driver instances
+        card = get_object_or_404(OrderCard, id=cardID)
+        new_driver = get_object_or_404(Delivery, id=newDriverID)
+        # print(card)
+        # print(new_driver.driver_name)
+        # Assign new driver to card
+        card.delivery = new_driver
+        card.save()
+        
+    response_data = {
+        'driver_name': card.delivery.driver_name,
+        'driver_city_line': card.delivery.driver_city_line,
+        'driver_phone': card.delivery.driver_phone,
+    }
+    print(response_data)
+    return JsonResponse(response_data)
 # # Process: Delete
 # def remove_order_list(request,order_id):
 #     order_list = Order_list.objects.get(id=order_id)
