@@ -13,7 +13,9 @@
         <h1>Orders</h1>
 
         <!-- Search bar -->
+        
         <input type="text" id="searchInput" class="form-control" placeholder="Search orders by ID or customer name..." onkeyup="searchOrders()">
+
 
         <!-- Tab Navigation -->
         <ul class="nav nav-tabs mt-4 " id="orderStatusTabs" role="tablist">
@@ -35,9 +37,17 @@
             <li class="nav-item" role="presentation">
                 <a class="nav-link yellow" id="canceled-tab" data-bs-toggle="tab" href="#" role="tab" onclick="filterOrders('canceled')">Canceled</a>
             </li>
+            <li class="nav-item" role="presentation">
+                <a href="/create_new_order_card_page" class="nav-link yellow add-card">Add New Card +
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-card-heading" viewBox="0 0 16 16">
+                        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
+                        <path d="M3 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0-5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </a>            </li>
         </ul>
 
         <div class="orders-list mt-4">
+
             {% for card in orders_cards %}
             <div class="order-card mt-4 d-flex" data-status="{{ card.order.status }}" data-id="{{ card.order.id }}" data-customer="{{ card.order.customer.name | lower }}">
                 

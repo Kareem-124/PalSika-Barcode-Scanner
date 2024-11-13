@@ -457,11 +457,13 @@ def edit_driver_process(request, driver_id):
     
 def edit_order_card_page(request, order_card_id):
     # get the order card
+    
     order_card = get_object_or_404(OrderCard, id=order_card_id)
 
     # get all the orders 
-    orders = Order.objects.all()
     
+    available_orders = Order.objects.filter(display=True, order_card__isnull=True)
+    orders = available_orders
     # get all the drivers
     deliveries = Delivery.objects.all()
 
@@ -480,16 +482,22 @@ def edit_order_card_process(request, order_card_id):
     deliveries = Delivery.objects.all()  # Retrieve all drivers for dropdown
             # get all the orders 
     orders = Order.objects.all()
+    pre_order = Order.objects.get(id=request.POST['pre_order_id'])
 
     if request.method == 'POST':
         # Update fields based on form data
-        print(Delivery.objects.get(id=int(request.POST.get('delivery'))))
+
         order_card.delivery = Delivery.objects.get(id=int(request.POST.get('delivery'))) 
         order_card.order = Order.objects.get(id=int(request.POST.get('order'))) 
         order_card.total_discount = request.POST.get('total_discount')
         order_card.net_price = request.POST.get('net_price')
         order_card.order_notes = request.POST.get('order_notes')
+        order_card.order.display = False
         order_card.save()
+
+        pre_order.display = True
+        pre_order.save()
+        
         messages.success(request, "Order card updated successfully.")
         return redirect('orders_dashboard_page')  # Adjust to the actual success page
 
@@ -501,11 +509,61 @@ def edit_order_card_process(request, order_card_id):
         
     })
 
+
+def create_new_order_card_page(request):
+    # Fetch orders without an OrderCard and with display set to True
+    available_orders = Order.objects.filter(display=True, order_card__isnull=True)
+    deliveries = Delivery.objects.all()  # Fetch all deliveries for dropdown
+    
+    return render(request, 'create_new_order_card_page.html', {
+        'available_orders': available_orders,
+        'deliveries': deliveries,
+    })
+
+
+
+def create_new_order_card_process(request):
+    
+    if request.method == 'POST':
+        order_id = request.POST.get('order')
+        delivery_id = request.POST.get('delivery')
+        total_discount = request.POST.get('total_discount')
+        net_price = request.POST.get('net_price')
+        order_notes = request.POST.get('order_notes')
+
+        # Get order and delivery objects
+        order = Order.objects.get(id=order_id)
+        delivery = Delivery.objects.get(id=delivery_id) if delivery_id else None
+
+        # Create and save new OrderCard
+        order_card = OrderCard.objects.create(
+            order=order,
+            delivery=delivery,
+            total_discount=total_discount,
+            net_price=net_price,
+            order_notes=order_notes,
+        )
+        # Mark the order as assigned
+        order.display = False
+        order.save()
+
+        messages.success(request, "Order Card created successfully.")
+        return redirect('orders_dashboard_page')  # Change to the relevant success page
+
+    messages.error(request, "Failed to create Order Card.")
+    return redirect('create_new_order_card_page')
+
+
+
+
 def SOP_process(request):
     if request.method == 'POST':
         # Retrieve or create the Customer instance
             customer_name = request.POST.get("customer_name")
             customer, created = Customer.objects.get_or_create(name=customer_name)
+
+
+
 # # Process: Delete
 # def remove_order_list(request,order_id):
 #     order_list = Order_list.objects.get(id=order_id)

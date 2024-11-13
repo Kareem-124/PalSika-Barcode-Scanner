@@ -18,15 +18,13 @@
                     <div class="alert alert-{{ message.tags }} color-red">{{ message }}</div>
                 {% endfor %}
             {% endif %}
+            <input type="text" name="pre_order_id" value="{{ order_card.order.id }}" hidden>
             <!-- Adding Order section -->
             <label for="delivery">Order</label>
             <select id="order" name="order" required>
+                <option value="{{ order_card.order.id }}" selected>Order for {{ order_card.order.customer }} / Delivery date : {{ order_card.order.delivery_date }} </option>
                 {% for order in orders %}
-                    {% if order.id == order_card.order.id %}
-                        <option value="{{ order.id }}" selected>Order for {{ order.customer }} / Delivery date : {{ order.delivery_date }} </option>
-                    {% else %}
                         <option value="{{ order.id }}">Order for {{ order.customer }} / Delivery date : {{ order.delivery_date }}</option>
-                    {% endif %}
                 {% endfor %}
             </select>
 

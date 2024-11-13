@@ -16,7 +16,13 @@ h1 {
     color: #333;
     margin-bottom: 30px;
 }
+.add-card {
+margin-left: 2rem !important;
 
+}
+.add-card:hover{
+    color: #333 !important;
+}
 .orders-list {
     display: flex;
     flex-direction: column;

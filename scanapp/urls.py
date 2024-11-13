@@ -22,5 +22,7 @@ urlpatterns = [
     path('edit_driver_process/<int:driver_id>/', views.edit_driver_process, name='edit_driver_process'),
     path('edit_order_card_page/<int:order_card_id>/', views.edit_order_card_page, name='edit_order_card_page'),
     path('edit_order_card_process/<int:order_card_id>/', views.edit_order_card_process, name='edit_order_card_process'),
+    path('create_new_order_card_page/', views.create_new_order_card_page, name='create_new_order_card_page'),
+    path('create_new_order_card_process/', views.create_new_order_card_process, name='create_new_order_card_process'),
 
 ]
