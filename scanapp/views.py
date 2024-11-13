@@ -418,6 +418,88 @@ def add_driver_process(request):
     # If not a POST request, return to the form page
     return render(request, "create_new_driver_page.html")
 
+def edit_driver_page(request, driver_id):
+    driver = get_object_or_404(Delivery, id=driver_id)
+    context = {
+        "driver": driver,
+    }
+    return render(request, 'edit_driver_page.html', context)
+
+def edit_driver_process(request, driver_id):
+    # Retrieve the driver instance
+    driver = get_object_or_404(Delivery, id=driver_id)
+    
+    # Handle GET request to render the edit page with driver data
+    if request.method == "GET":
+        return render(request, "edit_driver.html", {"driver": driver})
+    
+    # Handle POST request to update driver details
+    if request.method == "POST":
+        driver_name = request.POST.get("driver_name")
+        driver_city_line = request.POST.get("city_line")
+        driver_phone = request.POST.get("phone")
+        notes = request.POST.get("notes", "")
+        
+        # Check if another driver with the same name already exists
+        if Delivery.objects.filter(driver_name=driver_name).exclude(id=driver_id).exists():
+            messages.error(request, "A driver with this name already exists. Please choose a unique name.")
+            return render(request, "edit_driver.html", {"driver": driver})
+        
+        # Update driver details
+        driver.driver_name = driver_name
+        driver.driver_city_line = driver_city_line
+        driver.driver_phone = driver_phone
+        driver.notes = notes
+        driver.save()
+        
+        messages.success(request, "Driver details updated successfully!")
+        return redirect("orders_dashboard_page")
+    
+def edit_order_card_page(request, order_card_id):
+    # get the order card
+    order_card = get_object_or_404(OrderCard, id=order_card_id)
+
+    # get all the orders 
+    orders = Order.objects.all()
+    
+    # get all the drivers
+    deliveries = Delivery.objects.all()
+
+    context = {
+        "order_card" : order_card,
+        "orders" : orders,
+        "deliveries" : deliveries,
+        
+    }
+
+    return render(request, 'edit_order_card_page.html', context)
+
+def edit_order_card_process(request, order_card_id):
+    order_card = get_object_or_404(OrderCard, id=order_card_id)
+    print(f"This is the order card object: {order_card.delivery}")
+    deliveries = Delivery.objects.all()  # Retrieve all drivers for dropdown
+            # get all the orders 
+    orders = Order.objects.all()
+
+    if request.method == 'POST':
+        # Update fields based on form data
+        print(Delivery.objects.get(id=int(request.POST.get('delivery'))))
+        order_card.delivery = Delivery.objects.get(id=int(request.POST.get('delivery'))) 
+        order_card.order = Order.objects.get(id=int(request.POST.get('order'))) 
+        order_card.total_discount = request.POST.get('total_discount')
+        order_card.net_price = request.POST.get('net_price')
+        order_card.order_notes = request.POST.get('order_notes')
+        order_card.save()
+        messages.success(request, "Order card updated successfully.")
+        return redirect('orders_dashboard_page')  # Adjust to the actual success page
+
+
+    return render(request, 'order_card_edit_page.html', {
+        'order_card': order_card,
+        'deliveries': deliveries,
+        "orders" : orders,
+        
+    })
 
 def SOP_process(request):
     if request.method == 'POST':

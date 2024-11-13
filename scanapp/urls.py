@@ -18,5 +18,9 @@ urlpatterns = [
     path('order_page_assign_new_driver/', views.order_page_assign_new_driver, name='order_page_assign_new_driver'),
     path('create_new_driver_page/', views.create_new_driver_page, name='create_new_driver_page'),
     path('add_driver_process/', views.add_driver_process, name='add_driver_process'),
+    path('edit_driver_page/<int:driver_id>/', views.edit_driver_page, name='edit_driver_page'),
+    path('edit_driver_process/<int:driver_id>/', views.edit_driver_process, name='edit_driver_process'),
+    path('edit_order_card_page/<int:order_card_id>/', views.edit_order_card_page, name='edit_order_card_page'),
+    path('edit_order_card_process/<int:order_card_id>/', views.edit_order_card_process, name='edit_order_card_process'),
 
 ]
