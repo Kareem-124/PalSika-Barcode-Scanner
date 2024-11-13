@@ -379,8 +379,51 @@ def order_page_assign_new_driver(request):
 def create_new_driver_page(request):
     return render(request, "create_new_driver_page.html")
 
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.contrib import messages
+
 def add_driver_process(request):
-    pass
+    if request.method == "POST":
+        # Retrieve data from the form
+        driver_name = request.POST.get("driver_name")
+        driver_city_line = request.POST.get("city_line")
+        driver_phone = request.POST.get("phone")
+        notes = request.POST.get("notes", "")
+
+                # Check if driver with this name already exists
+        if Delivery.objects.filter(driver_name=driver_name).exists():
+            # If driver exists, send an error message and return to the form page
+            messages.error(request, "A driver with this name already exists. Please enter a unique driver name.")
+            return render(request, "create_new_driver_page.html", {
+                "driver_name": driver_name,
+                "driver_city_line": driver_city_line,
+                "driver_phone": driver_phone,
+                "notes": notes,
+            })
+        
+        # Create a new Delivery entry
+        new_driver = Delivery(
+            driver_name=driver_name,
+            driver_city_line=driver_city_line,
+            driver_phone=driver_phone,
+            notes=notes
+        )
+        new_driver.save()  # Save the new driver to the database
+
+        # Success message and redirect
+        messages.success(request, "New driver added successfully!")
+        return redirect("orders_dashboard_page") 
+
+    # If not a POST request, return to the form page
+    return render(request, "create_new_driver_page.html")
+
+
+def SOP_process(request):
+    if request.method == 'POST':
+        # Retrieve or create the Customer instance
+            customer_name = request.POST.get("customer_name")
+            customer, created = Customer.objects.get_or_create(name=customer_name)
 # # Process: Delete
 # def remove_order_list(request,order_id):
 #     order_list = Order_list.objects.get(id=order_id)
