@@ -11,8 +11,11 @@
 body{
     background-color: var(--background-color2);
 }
+a {
+    text-decoration: none;
+}
 /* Sidebar */
-#sidebar {
+/* #sidebar {
     background-color: var(--primary-color);
     color: var(--secondary-color);
     padding-top: 20px;
@@ -39,7 +42,240 @@ body{
 #sidebar a.nav-link:hover {
     color: var(--primary-color);
     background-color: var(--background-color2);
+} */
+
+/* Side Nav Bar */
+/* Side Menu Container */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #ffffff;
+    border-right: 2px solid #ffdf5f;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    z-index: 10;
+    transition: transform 0.3s ease;
 }
+
+/* Menu Header */
+.side-menu .menu-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+/* Menu Links */
+.side-menu a {
+    text-decoration: none;
+    color: #555;
+    font-size: 1rem;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.side-menu a:hover {
+    background-color: #ffeb9d;
+    color: #333;
+}
+
+.side-menu a.active {
+    background-color: #ffdf5f;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Submenu Toggle */
+.side-menu .submenu-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.side-menu .submenu-toggle::after {
+    content: "▼";
+    font-size: 0.8rem;
+    margin-left: auto;
+    color: #555;
+}
+
+.side-menu .submenu-toggle.open::after {
+    transform: rotate(180deg);
+}
+
+/* Submenu Styles */
+.side-menu .submenu {
+    display: none;
+    flex-direction: column;
+    padding-left: 1.5rem;
+    margin-top: 5px;
+}
+
+.side-menu .submenu a {
+    font-size: 0.9rem;
+    padding: 8px 10px;
+}
+
+.side-menu .submenu-toggle.open + .submenu {
+    display: flex;
+}
+
+/* Button Style */
+.side-menu .add-card {
+    background-color: #ffba00;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: auto;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.side-menu .add-card:hover {
+    background-color: #e0a800;
+}
+
+/* Toggle Button for Mobile */
+.side-menu-toggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .side-menu {
+        transform: translateX(-100%);
+    }
+    .side-menu.open {
+        transform: translateX(0);
+    }
+    .side-menu-toggle {
+        display: block;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-color: #ffba00;
+        color: white;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+}
+
+/* Menu Header */
+.side-menu .menu-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+/* Menu Links */
+.side-menu a {
+    text-decoration: none;
+    color: #555;
+    font-size: 1rem;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.side-menu a:hover {
+    background-color: #ffeb9d;
+    color: #333;
+}
+
+.side-menu a.active {
+    background-color: #ffdf5f;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Submenu Toggle */
+.side-menu .submenu-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.side-menu .submenu-toggle::after {
+    content: "▼";
+    font-size: 0.8rem;
+    margin-left: auto;
+    color: #555;
+}
+
+.side-menu .submenu-toggle.open::after {
+    transform: rotate(180deg);
+}
+
+/* Submenu Styles */
+.side-menu .submenu {
+    display: none;
+    flex-direction: column;
+    padding-left: 1.5rem;
+    margin-top: 5px;
+}
+
+.side-menu .submenu a {
+    font-size: 0.9rem;
+    padding: 8px 10px;
+}
+
+.side-menu .submenu-toggle.open + .submenu {
+    display: flex;
+}
+
+/* Button Style */
+.side-menu .add-card {
+    background-color: #ffba00;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: auto;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.side-menu .add-card:hover {
+    background-color: #e0a800;
+}
+
+/* Toggle Button for Mobile */
+.side-menu-toggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .side-menu {
+        transform: translateX(-100%);
+    }
+    .side-menu.open {
+        transform: translateX(0);
+    }
+    .side-menu-toggle {
+        display: block;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-color: #ffba00;
+        color: white;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+}
+
 
 /* Toggle button */
 .toggle-btn {
