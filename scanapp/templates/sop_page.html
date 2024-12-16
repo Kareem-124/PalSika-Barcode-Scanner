@@ -134,7 +134,9 @@
     <div class="container">
         
         <h1>Sell to Customers</h1>
-        <form method="POST" action="{% url 'sop_sell_request' %}">
+        <form method="POST" action="{% url 'sop_sell_request' %}"  onkeydown="if(event.keyCode === 13) { 
+            return false;
+    }">
         <div class="dropdown-container position-relative">
 
                 {% csrf_token %}

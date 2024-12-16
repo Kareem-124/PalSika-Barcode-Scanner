@@ -597,6 +597,9 @@ def sop_sell_request(request):
         count = 1
         products_list = []
         customerName = request.POST.get('customerName')
+        # if the user didn't enter a customer name use N/A as default
+        if not customerName:
+            customerName = "N/A"
         customer, created = Customer.objects.get_or_create(name=customerName) # create or get customer
         print(customer.name)
 
@@ -658,12 +661,30 @@ def sop_sell_request(request):
                 print(f"Error: {e}, Breaking out of the loop")
                 break
 
+    
+    #----------------------------- Create Order CARD  ----------------------------------------
 
+        
+        delivery_id = 7
+        order_notes = "No notes yet"
 
+        # Get order and delivery objects
+        # order = Order.objects.get(id=order_id)
+        delivery = Delivery.objects.get(id=delivery_id) if delivery_id else None
 
+        # Create and save new OrderCard
+        order_card = OrderCard.objects.create(
+            order=order,
+            delivery=delivery,
+            total_discount=totalDisc,
+            net_price=totalPrice,
+            order_notes=order_notes,
+        )
+        # Mark the order as assigned
+        order.display = False
+        order.save()
 
-
-        return JsonResponse({'messages': "Name Received"})
+        return redirect ("sop_page")
 
 # # Process: Delete
 # def remove_order_list(request,order_id):
