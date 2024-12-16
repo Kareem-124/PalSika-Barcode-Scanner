@@ -9,6 +9,9 @@ from django.db.models import Sum, Count
 from datetime import timedelta
 from django.shortcuts import get_object_or_404
 import json
+from django.http import JsonResponse
+from django.core.serializers import serialize
+from django.forms.models import model_to_dict  # Use for more control
 
 def index(request):
     return render(request, 'index.html')
@@ -553,7 +556,13 @@ def create_new_order_card_process(request):
     messages.error(request, "Failed to create Order Card.")
     return redirect('create_new_order_card_page')
 
+def show_orders_page(request):
+    orders = Order.objects.all()
+    context = {
+        'orders': orders,
+        }
 
+    return render(request, 'show_orders_page.html', context)
 
 
 def SOP_process(request):
@@ -563,6 +572,98 @@ def SOP_process(request):
             customer, created = Customer.objects.get_or_create(name=customer_name)
 
 
+def sop_page(request):
+    customer_names = Customer.objects.values_list('name', flat=True).distinct()
+    products = Product.objects.all()
+    
+    context = {
+        'customers_names' : list(customer_names),
+        'products' : products,
+    }
+    return render(request, 'sop_page.html', context)
+
+def sop_page_request_product_data(request):
+    if request.method == 'POST':
+        selected_product_id = request.POST.get('selectedProductID')
+        print("Received selectedProductID:", selected_product_id)  # Print to console
+        product = Product.objects.get(product_id=selected_product_id)
+        product_data = model_to_dict(product)
+        return JsonResponse({'message': 'Product ID received', 'product': product_data})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+def sop_sell_request(request):
+    if request.method == 'POST':
+
+        count = 1
+        products_list = []
+        customerName = request.POST.get('customerName')
+        customer, created = Customer.objects.get_or_create(name=customerName) # create or get customer
+        print(customer.name)
+
+        #----------------------------- CREATE NEW ORDER ----------------------------------------
+# Customer Name : customer
+# Order Type : "Sell"
+# Delivery Date : Now
+# Status : "completed"
+        # Create the Order with the Customer foreign key
+        order = Order.objects.create(
+            customer=customer,
+            order_type="sell",
+            delivery_date=timezone.now(),
+            order_date=timezone.now(),
+            status="completed"
+        )
+        print("Order created")
+
+                #----------------------------- Loop to get the products details  ----------------------------------------
+        # Loop to retrieve products dynamically
+        while True:
+            try:
+                productName = request.POST.get(f'product_name_{count}')
+                print(f"I am trying to get product_name_{count}")
+                print(productName)
+                if productName is None:
+                    print("there is no data!!!")
+                    break # Stop the loop if no more products
+                
+                # Retrieve product ID, quantity, and unit price
+                productID = request.POST.get(f"product_id_{count}") # Get the ID
+                productQTY = request.POST.get(f"product_qty_{count}") # Get the qty
+                productPrice = request.POST.get(f"product_price_{count}") # get the price
+                productDisc = request.POST.get(f"product_disc_{count}") # get the discount
+                totalDisc = request.POST.get("totalDisc") # get the total discount
+                totalPrice = request.POST.get("totalPrice") # get the total price
+                products_list.append(productName)
+                print(f"Product List: {products_list}")
+                print(f"Product ID: {productID}")
+                print(f"Product qty: {productQTY}")
+                print(f"Product price: {productPrice}")
+                print(f"Total Discount: {totalDisc}")
+                print(f"Total Price: {totalPrice}")
+                print("-------------")
+                count += 1 
+
+
+                # Create OrderItem if product and quantity exist
+                if productID and productQTY:
+                    product = Product.objects.get(product_id=productID)
+                    OrderItem.objects.create(
+                        order=order,
+                        product=product,
+                        quantity=int(productQTY),
+                        price=float(productPrice)
+                    )
+                print(f"OrderItem created for {product.name}")
+            except Exception as e:
+                print(f"Error: {e}, Breaking out of the loop")
+                break
+
+
+
+
+
+
+        return JsonResponse({'messages': "Name Received"})
 
 # # Process: Delete
 # def remove_order_list(request,order_id):

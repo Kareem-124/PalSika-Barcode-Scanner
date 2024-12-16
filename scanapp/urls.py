@@ -24,5 +24,9 @@ urlpatterns = [
     path('edit_order_card_process/<int:order_card_id>/', views.edit_order_card_process, name='edit_order_card_process'),
     path('create_new_order_card_page/', views.create_new_order_card_page, name='create_new_order_card_page'),
     path('create_new_order_card_process/', views.create_new_order_card_process, name='create_new_order_card_process'),
+    path('show_orders_page/', views.show_orders_page, name='show_orders_page'),
+    path('sop_page/', views.sop_page, name='sop_page'),
+    path('sop_page_request_product_data/', views.sop_page_request_product_data, name='sop_page_request_product_data'),
+    path('sop_sell_request/', views.sop_sell_request, name='sop_sell_request'),
 
 ]

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/style_show_orders.css' %}">
+</head>
+<body>
+
+        <div class="container">
+            <h1>Orders List</h1>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search for a product..." onkeyup="filterTable()">
+            </div>
+            <div class="btn-group">
+                <button id="home-btn" class="btn-home">Home Page</button>
+                <button id="add-product-btn" class="btn-home">Add New Order (+)</button>
+            </div>
+    
+            <!-- Table for large screens -->
+            <table id="product-table" class="product-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Order ID</th>
+                        <th>Creation Date</th>
+                        <th>Customer Name</th>
+                        <th>Sell/Buy</th>
+                        <th>Date of Delivery</th>
+                        <th>Notes</th>
+                        <th>Test</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%  for order in orders %}
+                    <tr id="{{ forloop.counter }}">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.order_date }}</td>
+                        <td>{{ order.customer }}</td>
+                        <td>{{ order.order_type }}</td>
+                        <td>{{ order.delivery_date }}</td>
+                        <td>
+                            <table>
+                                <th>Product Name</th>
+                                <th>Qty</th>
+                                <th>Price / Unit</th>
+                            </table>
+
+
+                        </td>
+                        <td id="rowNote">
+                            <div id="noteContainer" class="note-display">
+                                <div class="show Edit-btn-note-width" id="Edit{{ forloop.counter }}" data="{{ forloop.counter }}"><a href="/edit_order_page/{{ order.id }}/" class="btn-edit">Edit</a></div>
+                            </div>
+                            
+                        </td>
+                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    
+            <!-- Cards for small screens -->
+            <div id="product-cards" class="product-cards">
+                {% for order in orders %}
+                <div class="card">
+                    <h3>{{ product.name }}</h3>
+                    <hr>
+                    <!-- <p><strong>ID:</strong> {{ product.product_id }}</p> -->
+                    <p><strong>Price:</strong> <span class="price-bg">{{ product.customer_price }}</span></p>
+                    <p><strong>Category:</strong> {{ product.category }}</p>
+                    <p><strong>Notes:</strong></p>
+                    <p dir="rtl">{{ product.notes | linebreaksbr }}</p>
+    
+                    <!-- Edit and Delete buttons -->
+                    <div class="card-buttons">
+                        
+                        
+                        <a href="/edit_product_page/{{ product.product_id }}/" class="card-button edit-btn">Edit</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    
+        <script>
+
+            const homeButton = document.getElementById('home-btn');
+            const addNewProductButton = document.getElementById('add-product-btn');
+            
+            // Home Button function redirect
+            homeButton.addEventListener('click', function() {
+                window.location.href = "/";
+            });
+            // Add New Button function redirect 
+            addNewProductButton.addEventListener('click', function() {
+                window.location.href = "/create_new_order_page";
+            });
+    
+            //  Filter Function
+            function filterTable() {
+                const searchInput = document.getElementById('search-input');
+                const filter = searchInput.value.toLowerCase();
+                const table = document.getElementById('product-table');
+                const rows = table.getElementsByTagName('tr');
+                const cards = document.getElementsByClassName('card');
+    
+                for (let i = 1; i < rows.length; i++) {
+                    let visible = false;
+                    const cols = rows[i].getElementsByTagName('td');
+                    for (let j = 0; j < cols.length; j++) {
+                        if (cols[j].textContent.toLowerCase().includes(filter)) {
+                            visible = true;
+                        }
+                    }
+                    rows[i].style.display = visible ? '' : 'none';
+                }
+    
+                // For cards
+                for (let i = 0; i < cards.length; i++) {
+                    const card = cards[i];
+                    const cardText = card.textContent.toLowerCase();
+                    card.style.display = cardText.includes(filter) ? '' : 'none';
+                }
+            }
+            // This part is responsible for showing the "Edit" Button when selecting a row
+            document.addEventListener('DOMContentLoaded', function(){
+                const table = document.getElementById('product-table');
+                let selectedRow = null; // this is a flag for each row
+                table.querySelectorAll('tbody tr').forEach(function(row){
+                    row.addEventListener('click',function(){
+                        
+                        rowID="Edit"+row.id;
+                        
+                        editbutton = document.getElementById(rowID);
+                        if (selectedRow){
+                            selectedRow.classList.remove('selected-row');
+                            preEditButtonID = "Edit"+selectedRow.id;
+                            preEditButton = document.getElementById(preEditButtonID);
+                            preEditButton.style.display='none';
+    
+                        }
+    
+                        if (selectedRow === row){
+                            selectedRow = null;
+                            editbutton.style.display='none'
+                        }
+    
+                        else{
+                            row.classList.add('selected-row');
+                            selectedRow = row;
+                            
+                            editbutton.style.display='block'
+    
+                        }
+                    })
+                })
+                // const target = document.querySelectorAll();
+    
+    
+            });
+            
+            // Toggel function
+    //         function Toggle(element){
+    //             // if (element.children[7].style.display === "none"){
+    //             //     element.children[7].style.display  = "block";
+    //             // }
+    //             // else{
+    //             //     element.children[7].style.display === "none"
+    //             // }
+    
+    // //             document.getElementById("MyElement").classList.add('MyClass');
+    
+    // // document.getElementById("MyElement").classList.remove('MyClass');
+    
+    // // if ( document.getElementById("MyElement").classList.contains('MyClass') )
+    
+    // // document.getElementById("MyElement").classList.toggle('MyClass');
+    //             let id = "Edit"+element.children[7].attributes.data.value;
+                
+    //     target = document.getElementById(id);  
+    //     if (target.classList.contains('hide')){
+    
+    //     }    
+        // console.log("Edit"+(element.children[7].attributes.data.value));
+    
+    
+            // }
+        </script>
+
+</body>
+</html>
