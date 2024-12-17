@@ -74,9 +74,10 @@ def edit_product_page(request,product_id):
 def edit_product_process(request):
     if request.method == 'POST':
         
-        product_id = request.POST['product_id']
+        product_id = request.POST['old_product_id']
+        print(product_id)
         product = Product.objects.get(product_id=product_id)
-        
+        product.product_id= request.POST['product_id']
         product.name = request.POST['name']
         product.customer_price = request.POST['customer_price']
         product.retail_price = request.POST['retail_price']
@@ -317,7 +318,8 @@ def create_new_order_process(request):
 
 # Pager: orders_page displays all opened order cards 
 def orders_page(request):
-    orders_cards = OrderCard.objects.select_related('order', 'delivery', 'order__customer').order_by('-order__delivery_date')
+    orders_cards = OrderCard.objects.select_related('order', 'delivery', 'order__customer').order_by('-created_date', '-id')
+
     delivery = Delivery.objects.all()
     
     context = {
@@ -338,6 +340,8 @@ def order_page_products_request(request, orderID):
             'product_name': item.product.name,
             'quantity': item.quantity,
             'price': str(item.price),  # Convert Decimal to string for JSON serialization
+            'discount': str(item.discount),  # Convert Decimal to string for JSON serialization
+            'total_price': str(item.total_items_price),  # Convert Decimal to string for JSON serialization
         }
         test.append(product_info)
     table_id = "table_" + orderID
@@ -650,11 +654,14 @@ def sop_sell_request(request):
                 # Create OrderItem if product and quantity exist
                 if productID and productQTY:
                     product = Product.objects.get(product_id=productID)
+                    total_items_price = (int(productQTY) * int(productPrice)) - int(productDisc)
                     OrderItem.objects.create(
                         order=order,
                         product=product,
                         quantity=int(productQTY),
-                        price=float(productPrice)
+                        price=float(productPrice),
+                        discount=float(productDisc),
+                        total_items_price=float(total_items_price),
                     )
                 print(f"OrderItem created for {product.name}")
             except Exception as e:

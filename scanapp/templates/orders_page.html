@@ -131,6 +131,8 @@
                                     <th>Product Name</th>
                                     <th>Quantity</th>
                                     <th>Price/Unit</th>
+                                    <th>Discount</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody id="table_{{ card.order.id}}">
@@ -142,6 +144,13 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <hr>
+                        <div>
+                            <h3>Total Discount: {{ card.total_discount}} </h3>
+                        </div>
+                        <div>
+                            <h3>Total Net Price: <span class="fw-bold">{{ card.net_price }}</span></h3>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -243,6 +252,8 @@ function filterOrders(status) {
                                 <td>${product.product_name}</td>
                                 <td>${product.quantity}</td>
                                 <td>${product.price}</td>
+                                <td>${product.discount}</td>
+                                <td>${product.total_price}</td>
                             `;
                             productList.appendChild(productItem);
                         });
