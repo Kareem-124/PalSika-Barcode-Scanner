@@ -638,8 +638,16 @@ def sop_sell_request(request):
                 productQTY = request.POST.get(f"product_qty_{count}") # Get the qty
                 productPrice = request.POST.get(f"product_price_{count}") # get the price
                 productDisc = request.POST.get(f"product_disc_{count}") # get the discount
-                totalDisc = request.POST.get("totalDisc") # get the total discount
-                totalPrice = request.POST.get("totalPrice") # get the total price
+                try:
+                    totalDisc = request.POST.get("totalDisc") # get the total discount
+                except:
+                    totalDisc = 0
+                
+                try:
+                    totalPrice = request.POST.get("totalPrice") # get the total price
+                except:
+                    totalPrice = 0
+                
                 products_list.append(productName)
                 print(f"Product List: {products_list}")
                 print(f"Product ID: {productID}")
@@ -654,7 +662,7 @@ def sop_sell_request(request):
                 # Create OrderItem if product and quantity exist
                 if productID and productQTY:
                     product = Product.objects.get(product_id=productID)
-                    total_items_price = (int(productQTY) * int(productPrice)) - int(productDisc)
+                    total_items_price = (int(productQTY) * float(productPrice)) - float(productDisc)
                     OrderItem.objects.create(
                         order=order,
                         product=product,
