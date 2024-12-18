@@ -461,7 +461,47 @@ def edit_driver_process(request, driver_id):
         
         messages.success(request, "Driver details updated successfully!")
         return redirect("orders_dashboard_page")
+
+# ----------Edit Customer Page and Process----------------------------
+def edit_customer_page(request, customerID):
+    customer = get_object_or_404(Customer, id=customerID)
+    context = {
+        "customer": customer,
+    }
+    return render(request, 'edit_customer_page.html', context)
+
+def edit_customer_process(request, customerID):
+    # Retrieve the customer instance
+    customer = get_object_or_404(Customer, id=customerID)
     
+    # Handle GET request to render the edit page with customer data
+    if request.method == "GET":
+        return render(request, "edit_driver.html", {"customer": customer})
+    
+    # Handle POST request to update driver details
+    if request.method == "POST":
+        customer_name = request.POST.get("customer_name")
+        phone_number = request.POST.get("phone_number")
+        address = request.POST.get("address")
+        email = request.POST.get("email","")
+        notes = request.POST.get("notes", "")
+        
+        # Check if another driver with the same name already exists
+        if Customer.objects.filter(name=customer_name).exclude(id=customerID).exists():
+            messages.error(request, "A Customer with this name already exists. Please choose a unique name.")
+            return render(request, "edit_driver.html", {"customer": customer})
+        
+        # Update driver details
+        customer.name = customer_name
+        customer.phone_number = phone_number
+        customer.address = address
+        customer.notes = notes
+        customer.save()
+        
+        messages.success(request, "Customer details updated successfully!")
+        return redirect("orders_dashboard_page")
+    
+
 def edit_order_card_page(request, order_card_id):
     # get the order card
     
