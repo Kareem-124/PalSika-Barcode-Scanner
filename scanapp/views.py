@@ -656,7 +656,7 @@ def sop_sell_request(request):
         # Create the Order with the Customer foreign key
         order = Order.objects.create(
             customer=customer,
-            order_type="sell",
+            order_type="Sell",
             delivery_date=timezone.now(),
             order_date=timezone.now(),
             status="completed"
@@ -741,6 +741,126 @@ def sop_sell_request(request):
         order.save()
 
         return redirect ("sop_page")
+
+
+# ------------------------------------------ Buy / Return page and process section
+
+def sop_buy_page(request):
+    customer_names = Customer.objects.values_list('name', flat=True).distinct()
+    products = Product.objects.all()
+    
+    context = {
+        'customers_names' : list(customer_names),
+        'products' : products,
+    }
+    return render(request, 'sop_buy_page.html', context)
+
+def sop_buy_request(request):
+    if request.method == 'POST':
+
+        count = 1
+        products_list = []
+        customerName = request.POST.get('customerName')
+        # if the user didn't enter a customer name use N/A as default
+        if not customerName:
+            customerName = "N/A"
+        customer, created = Customer.objects.get_or_create(name=customerName) # create or get customer
+        print(customer.name)
+
+        #----------------------------- CREATE NEW ORDER ----------------------------------------
+# Customer Name : customer
+# Order Type : "Buy"
+# Delivery Date : Now
+# Status : "completed"
+        # Create the Order with the Customer foreign key
+        order = Order.objects.create(
+            customer=customer,
+            order_type="Buy",
+            delivery_date=timezone.now(),
+            order_date=timezone.now(),
+            status="completed"
+        )
+        print("Order created")
+
+                #----------------------------- Loop to get the products details  ----------------------------------------
+        # Loop to retrieve products dynamically
+        while True:
+            try:
+                productName = request.POST.get(f'product_name_{count}')
+                print(f"I am trying to get product_name_{count}")
+                print(productName)
+                if productName is None:
+                    print("there is no data!!!")
+                    break # Stop the loop if no more products
+                
+                # Retrieve product ID, quantity, and unit price
+                productID = request.POST.get(f"product_id_{count}") # Get the ID
+                productQTY = request.POST.get(f"product_qty_{count}") # Get the qty
+                productPrice = request.POST.get(f"product_price_{count}") # get the price
+                productDisc = request.POST.get(f"product_disc_{count}") # get the discount
+                try:
+                    totalDisc = request.POST.get("totalDisc") # get the total discount
+                except:
+                    totalDisc = 0
+                
+                try:
+                    totalPrice = request.POST.get("totalPrice") # get the total price
+                except:
+                    totalPrice = 0
+                
+                products_list.append(productName)
+                print(f"Product List: {products_list}")
+                print(f"Product ID: {productID}")
+                print(f"Product qty: {productQTY}")
+                print(f"Product price: {productPrice}")
+                print(f"Total Discount: {totalDisc}")
+                print(f"Total Price: {totalPrice}")
+                print("-------------")
+                count += 1 
+
+
+                # Create OrderItem if product and quantity exist
+                if productID and productQTY:
+                    product = Product.objects.get(product_id=productID)
+                    total_items_price = (int(productQTY) * float(productPrice)) - float(productDisc)
+                    OrderItem.objects.create(
+                        order=order,
+                        product=product,
+                        quantity=int(productQTY),
+                        price=float(productPrice),
+                        discount=float(productDisc),
+                        total_items_price=float(total_items_price),
+                    )
+                print(f"OrderItem created for {product.name}")
+            except Exception as e:
+                print(f"Error: {e}, Breaking out of the loop")
+                break
+
+    
+    #----------------------------- Create Order CARD  ----------------------------------------
+
+        
+        delivery_id = 7
+        order_notes = "No notes yet"
+
+        # Get order and delivery objects
+        # order = Order.objects.get(id=order_id)
+        delivery = Delivery.objects.get(id=delivery_id) if delivery_id else None
+
+        # Create and save new OrderCard
+        order_card = OrderCard.objects.create(
+            order=order,
+            delivery=delivery,
+            total_discount=totalDisc,
+            net_price=totalPrice,
+            order_notes=order_notes,
+        )
+        # Mark the order as assigned
+        order.display = False
+        order.save()
+
+        return redirect ("sop_buy_page")
+
 
 # # Process: Delete
 # def remove_order_list(request,order_id):

@@ -27,7 +27,7 @@
 
         /* Full width of content when the sidebar is hidden */
         #main-content.full-width {
-            margin-left: 0;
+            margin-left: 15rem;
         }
 
         /* Toggle button style */
@@ -54,20 +54,33 @@
 <div id="total_pending_orders_by_delivery_date_value" data-value="{{ total_pending_orders_by_delivery_date | safe }}" hidden></div>
 <body>
 
-<!-- Sidebar -->
-<div id="sidebar" class="side-menu p-3">
+   <!-- Sidebar -->
+   <div id="sidebar" class="side-menu p-3">
     <h5 class="menu-header text-center">Menu</h5>
     <ul class="nav flex-column">
         <li class="nav-item"><a href="/orders_dashboard_page" class="nav-link active">Home</a></li>
-        <li class="nav-item"><a href="/sop_page" class="nav-link">Casher</a></li>
+        <li class="nav-item">
+            <!-- Toggle Button for Casher -->
+            <a href="#casherSubmenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                Casher
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                </svg>
+            </a>
+            <!-- Collapsible Section -->
+            <ul class="collapse nav flex-column ms-3" id="casherSubmenu">
+                <li class="nav-item w-100"><a href="/sop_page" class="nav-link">- Sell</a></li>
+                <li class="nav-item w-100"><a href="/sop_buy_page" class="nav-link"> - Buy / Return</a></li>
+            </ul>
+        </li>
         <li class="nav-item"><a href="/" class="nav-link">Scanner</a></li>
         <li class="nav-item"><a href="/orders_page" class="nav-link">Orders</a></li>
         <li class="nav-item"><a href="/search_for_product_page" class="nav-link">Products</a></li>
-</ul>
+    </ul>
 </div>
 
     <!-- Toggle button to hide/show sidebar -->
-    <!-- <button id="toggle-btn" class="btn btn-primary toggle-btn">Hide Menu</button> -->
+    <button id="toggle-btn" class="btn btn-primary toggle-btn">Hide Menu</button>
 
     <!-- Main content -->
     <div id="main-content" class="container mt-5">

@@ -30,5 +30,8 @@ urlpatterns = [
     path('sop_page/', views.sop_page, name='sop_page'),
     path('sop_page_request_product_data/', views.sop_page_request_product_data, name='sop_page_request_product_data'),
     path('sop_sell_request/', views.sop_sell_request, name='sop_sell_request'),
+    path('sop_buy_page/', views.sop_buy_page, name='sop_buy_page'),
+    path('sop_buy_request/', views.sop_buy_request, name='sop_buy_request'),
+
 
 ]

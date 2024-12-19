@@ -35,8 +35,8 @@ class Order(models.Model):
     ]
     
     ORDER_TYPE_CHOICES = [
-        ('buy', 'Buy'),
-        ('sell', 'Sell')
+        ('Buy', 'Buy'),
+        ('Sell', 'Sell')
     ]
     
     order_type = models.CharField(max_length=10, choices=ORDER_TYPE_CHOICES, default='SELLER')
