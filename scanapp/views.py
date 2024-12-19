@@ -218,7 +218,8 @@ def get_top_products_for_current_month():
     # Filter orders within the current month based on delivery_date
     orders_in_current_month = Order.objects.filter(
         delivery_date__gte=start_of_month,
-        delivery_date__lte=end_of_month
+        delivery_date__lte=end_of_month,
+        order_type='sell'
     )
     
     # Aggregate product data: name, number of orders, and total quantity for each product
