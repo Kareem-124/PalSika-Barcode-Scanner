@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/inventory.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<style>
+
+</style>
+
+<body>
+    <!-- Sidebar -->
+    <div id="sidebar" class="side-menu p-3">
+        <h5 class="menu-header text-center">Menu</h5>
+        <ul class="nav flex-column">
+            <li class="nav-item"><a href="/orders_dashboard_page" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="/inventory_page" class="nav-link active">Inventory</a></li>
+            <li class="nav-item"><a href="/sop_page" class="nav-link">Cashier</a></li>
+            <li class="nav-item"><a href="/" class="nav-link">Scanner</a></li>
+            <li class="nav-item"><a href="/orders_page" class="nav-link">Orders</a></li>
+            <li class="nav-item"><a href="/search_for_product_page" class="nav-link">Products</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h2 class="text-center mb-4">Inventory</h2>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search for products...">
+            <button id="search-button">Search</button>
+        </div>
+
+        <!-- Products Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Total Bought QTY (Imported)</th>
+                    <th>Total Sold (Exported)</th>
+                    <th>Available QTY</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Sample Row -->
+                <tr>
+                    <td>1</td>
+                    <td>P12345</td>
+                    <td>Product A</td>
+                    <td>100</td>
+                    <td>30</td>
+                    <td>70</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>P67890</td>
+                    <td>Product B</td>
+                    <td>150</td>
+                    <td>50</td>
+                    <td>100</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

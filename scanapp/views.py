@@ -672,6 +672,7 @@ def sop_sell_request(request):
                 print(productName)
                 if productName is None:
                     print("there is no data!!!")
+                    return redirect ("sop_page")
                     break # Stop the loop if no more products
                 
                 # Retrieve product ID, quantity, and unit price
@@ -861,6 +862,13 @@ def sop_buy_request(request):
 
         return redirect ("sop_buy_page")
 
+
+
+def inventory_page(request):
+    context = {
+        "data": "data"
+    }
+    return render (request, "inventory_page.html", context)
 
 # # Process: Delete
 # def remove_order_list(request,order_id):
