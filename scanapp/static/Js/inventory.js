@@ -72,16 +72,20 @@ const importedQty = document.getElementById('importedQty');
 const exportedQty = document.getElementById('exportedQty');
 const submitBtn = document.getElementById('submitBtn');
 const cancelBtn = document.getElementById('cancelBtn');
+const formProductID = document.getElementById('formProductID')
 
 // Function to open the modal
 function openModal(button) {
     // Extract data from button's data attributes
+    const productID = button.getAttribute('data-productID');
     const productName = button.getAttribute('data-productName');
     const importedValue = button.getAttribute('data-importedQTY');
     const exportedValue = button.getAttribute('data-exportedQTY');
     
     // Set modal content
-    modalTitle.textContent = `Edit Inventory for (<span class ="font-color-black">${productName}</span>)`;
+    console.log(modalTitle)
+    modalTitle.childNodes[1].textContent = `(${productName})`;
+    formProductID.value = productID;
     importedQty.value = importedValue || '';
     exportedQty.value = exportedValue || '';
 

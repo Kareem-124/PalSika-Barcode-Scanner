@@ -67,8 +67,9 @@
                             <div class="show Edit-btn-note-width" id="Edit{{ forloop.counter }}" data="{{ forloop.counter }}">
                                 <button class="btn-edit" value="{{ product.product_id }}" 
                                 data-productName="{{ product.name }}" 
+                                data-productID = "{{ product.product_id }}" 
                                 data-importedQTY ="{{ product.imported_qty }}" 
-                                data-exportedQTY ="{{ product.imported_qty }}" 
+                                data-exportedQTY ="{{ product.exported_qty }}" 
                                 onclick="openModal(this)">Edit</button></div>
 
                         </div>
@@ -83,23 +84,31 @@
 
 </div>
 <!-- Modal Structure -->
-<div id="editInventoryModal" class="modal-overlay">
-    <div class="modal-container">
-        <div class="modal-header">
-            <h2 id="modalTitle">Edit Inventory for <span class="font-color-black">(Product Name)</span></h2>
-        </div>
-        <div class="modal-body">
-            <label for="importedQty" class="modal-label">Imported Qty:</label>
-            <input type="number" id="importedQty" class="modal-input" placeholder="Enter imported quantity">
 
-            <label for="exportedQty" class="modal-label">Exported Qty:</label>
-            <input type="number" id="exportedQty" class="modal-input" placeholder="Enter exported quantity">
+<div id="editInventoryModal" class="modal-overlay">
+    
+    <form method="POST" action="{% url 'edit_inventory_request' %}"  onkeydown="if(event.keyCode === 13) { 
+        return false;
+}">
+{% csrf_token %}
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="modalTitle">Edit Inventory for <span class="font-color-black"></span></h2>
+                <input type="hidden" id="formProductID" name="formProductID" value="">
+            </div>
+            <div class="modal-body">
+                <label for="importedQty" class="modal-label">Imported Qty:</label>
+                <input type="number" id="importedQty" class="modal-input" placeholder="Enter imported quantity" name="importedQty">
+
+                <label for="exportedQty" class="modal-label">Exported Qty:</label>
+                <input type="number" id="exportedQty" class="modal-input" placeholder="Enter exported quantity" name="exportedQty">
+            </div>
+            <div class="modal-footer">
+                <button id="submitBtn" type="submit" class="modal-btn submit-btn">Submit</button>
+                <button type="button" id="cancelBtn" class="modal-btn cancel-btn">Cancel</button>
+            </div>
         </div>
-        <div class="modal-footer">
-            <button id="submitBtn" class="modal-btn submit-btn">Submit</button>
-            <button id="cancelBtn" class="modal-btn cancel-btn">Cancel</button>
-        </div>
-    </div>
+    </form>
 </div>
 
 </body>

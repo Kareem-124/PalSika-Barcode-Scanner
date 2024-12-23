@@ -909,7 +909,21 @@ def reset_all_inv_qty(request):
     return redirect ("inventory_page")
 
 
+def edit_inventory_request(request):
 
+    productID = request.POST.get("formProductID")
+    importedQty = request.POST.get("importedQty")
+    exportedQty = request.POST.get("exportedQty")
+    print(f"I got Product ID: {productID}")
+    # Get the product using ID
+    product = Product.objects.get(product_id = productID)
+    print(f"This is the product from the database: {product} ")
+    # Edit the values of the imported and exported Qty
+    product.imported_qty = importedQty
+    product.exported_qty = exportedQty
+    product.inventory_qty = int(importedQty) - int(exportedQty)
+    product.save()
+    return redirect ("inventory_page")
 
 
 # # Process: Delete
