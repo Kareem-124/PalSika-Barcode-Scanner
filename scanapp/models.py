@@ -4,6 +4,11 @@ class Product(models.Model):
     product_id = models.CharField(max_length=13, unique=True)  # Barcode as Product ID
     name = models.CharField(max_length=100)
     customer_price = models.DecimalField(max_digits=10, decimal_places=2)
+    inventory_upper_limit = models.IntegerField(default=0) 
+    inventory_lower_limit = models.IntegerField(default=0) 
+    imported_qty = models.IntegerField(default=0) 
+    exported_qty = models.IntegerField(default=0) 
+    inventory_qty = models.IntegerField(default=0) 
     retail_price = models.DecimalField(max_digits=10, decimal_places=2)
     notes = models.TextField(blank=True, null=True)
     category = models.CharField(max_length=100, default='N/A')  # New field

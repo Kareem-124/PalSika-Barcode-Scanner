@@ -273,8 +273,8 @@
                     <td>{{ product.category }}</td>
                     <td id="rowNote">
                         <div id="noteContainer" class="note-display">
-                            <div class="note-width text-align-right" dir="rtl">{{ product.notes | linebreaksbr }}</div>
-                            <div class="show Edit-btn-note-width" id="Edit{{ forloop.counter }}" data="{{ forloop.counter }}"><a href="/edit_product_page/{{ product.product_id }}/" class="btn-edit">Edit</a></div>
+                            <div class="text-align-right" dir="rtl">{{ product.notes | linebreaksbr }}</div>
+                            <div class="show" id="Edit{{ forloop.counter }}" data="{{ forloop.counter }}"><a href="/edit_product_page/{{ product.product_id }}/" class="btn-edit">Edit</a></div>
                         </div>
                         
                     </td>
@@ -350,7 +350,7 @@
             let selectedRow = null; // this is a flag for each row
             table.querySelectorAll('tbody tr').forEach(function(row){
                 row.addEventListener('click',function(){
-                    
+                    console.log(row.id);
                     rowID="Edit"+row.id;
                     
                     editbutton = document.getElementById(rowID);
@@ -376,37 +376,10 @@
                     }
                 })
             })
-            // const target = document.querySelectorAll();
 
 
         });
         
-        // Toggel function
-//         function Toggle(element){
-//             // if (element.children[7].style.display === "none"){
-//             //     element.children[7].style.display  = "block";
-//             // }
-//             // else{
-//             //     element.children[7].style.display === "none"
-//             // }
-
-// //             document.getElementById("MyElement").classList.add('MyClass');
-
-// // document.getElementById("MyElement").classList.remove('MyClass');
-
-// // if ( document.getElementById("MyElement").classList.contains('MyClass') )
-
-// // document.getElementById("MyElement").classList.toggle('MyClass');
-//             let id = "Edit"+element.children[7].attributes.data.value;
-            
-//     target = document.getElementById(id);  
-//     if (target.classList.contains('hide')){
-
-//     }    
-    // console.log("Edit"+(element.children[7].attributes.data.value));
-
-
-        // }
     </script>
 </body>
 </html>

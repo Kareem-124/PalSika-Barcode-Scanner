@@ -665,6 +665,7 @@ def sop_sell_request(request):
 
                 #----------------------------- Loop to get the products details  ----------------------------------------
         # Loop to retrieve products dynamically
+        
         while True:
             try:
                 productName = request.POST.get(f'product_name_{count}')
@@ -672,7 +673,6 @@ def sop_sell_request(request):
                 print(productName)
                 if productName is None:
                     print("there is no data!!!")
-                    return redirect ("sop_page")
                     break # Stop the loop if no more products
                 
                 # Retrieve product ID, quantity, and unit price
@@ -682,8 +682,10 @@ def sop_sell_request(request):
                 productDisc = request.POST.get(f"product_disc_{count}") # get the discount
                 try:
                     totalDisc = request.POST.get("totalDisc") # get the total discount
+                    print(f"Try is okay, and total Discount = {totalDisc}")
                 except:
                     totalDisc = 0
+                    print("I am at the expect")
                 
                 try:
                     totalPrice = request.POST.get("totalPrice") # get the total price
@@ -698,11 +700,11 @@ def sop_sell_request(request):
                 print(f"Total Discount: {totalDisc}")
                 print(f"Total Price: {totalPrice}")
                 print("-------------")
-                count += 1 
+                
 
 
                 # Create OrderItem if product and quantity exist
-                if productID and productQTY:
+                if productID :
                     product = Product.objects.get(product_id=productID)
                     total_items_price = (int(productQTY) * float(productPrice)) - float(productDisc)
                     OrderItem.objects.create(
@@ -713,6 +715,10 @@ def sop_sell_request(request):
                         discount=float(productDisc),
                         total_items_price=float(total_items_price),
                     )
+                    product.inventory_qty = int(product.inventory_qty) - int(productQTY)
+                    product.exported_qty = int(product.exported_qty) + int(productQTY)
+                    product.save()
+                count = count + 1
                 print(f"OrderItem created for {product.name}")
             except Exception as e:
                 print(f"Error: {e}, Breaking out of the loop")
@@ -729,6 +735,17 @@ def sop_sell_request(request):
         # order = Order.objects.get(id=order_id)
         delivery = Delivery.objects.get(id=delivery_id) if delivery_id else None
 
+        try:
+            totalDisc = request.POST.get("totalDisc") # get the total discount
+            print(f"Try is okay, and total Discount = {totalDisc}")
+        except:
+            totalDisc = 0
+            print("I am at the expect")
+        
+        try:
+            totalPrice = request.POST.get("totalPrice") # get the total price
+        except:
+            totalPrice = 0
         # Create and save new OrderCard
         order_card = OrderCard.objects.create(
             order=order,
@@ -821,17 +838,20 @@ def sop_buy_request(request):
 
 
                 # Create OrderItem if product and quantity exist
-                if productID and productQTY:
-                    product = Product.objects.get(product_id=productID)
-                    total_items_price = (int(productQTY) * float(productPrice)) - float(productDisc)
-                    OrderItem.objects.create(
-                        order=order,
-                        product=product,
-                        quantity=int(productQTY),
-                        price=float(productPrice),
-                        discount=float(productDisc),
-                        total_items_price=float(total_items_price),
-                    )
+                
+                product = Product.objects.get(product_id=productID)
+                total_items_price = (int(productQTY) * float(productPrice)) - float(productDisc)
+                OrderItem.objects.create(
+                    order=order,
+                    product=product,
+                    quantity=int(productQTY),
+                    price=float(productPrice),
+                    discount=float(productDisc),
+                    total_items_price=float(total_items_price),
+                )
+                product.inventory_qty = int(product.inventory_qty) + int(productQTY)
+                product.imported_qty = int(product.imported_qty) + int(productQTY)
+                product.save()
                 print(f"OrderItem created for {product.name}")
             except Exception as e:
                 print(f"Error: {e}, Breaking out of the loop")
@@ -856,6 +876,7 @@ def sop_buy_request(request):
             net_price=totalPrice,
             order_notes=order_notes,
         )
+        print(f"OrderCard has been created: {order_card}")
         # Mark the order as assigned
         order.display = False
         order.save()
@@ -865,10 +886,31 @@ def sop_buy_request(request):
 
 
 def inventory_page(request):
+    products = Product.objects.all()
     context = {
-        "data": "data"
+        "data": "data",
+        "products" : products,
     }
     return render (request, "inventory_page.html", context)
+
+
+# This function will reset (inventory_qty / imported_qty and / exported_qty) in the database
+# When running this function it will take sometime so don't worry about it if you think it froze
+def reset_all_inv_qty(request):
+    products = Product.objects.all()
+
+    for product in products:
+        
+        product.inventory_qty = 0
+        product.imported_qty = 0
+        product.exported_qty = 0
+        product.save()
+        print(f"product: {product.name} QTY has been rested !!")
+    return redirect ("inventory_page")
+
+
+
+
 
 # # Process: Delete
 # def remove_order_list(request,order_id):

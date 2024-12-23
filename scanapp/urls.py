@@ -33,6 +33,7 @@ urlpatterns = [
     path('sop_buy_page/', views.sop_buy_page, name='sop_buy_page'),
     path('sop_buy_request/', views.sop_buy_request, name='sop_buy_request'),
     path('inventory_page/', views.inventory_page, name='inventory_page'),
+    path('reset_all_inv_qty/', views.reset_all_inv_qty, name='reset_all_inv_qty'),
 
 
 ]

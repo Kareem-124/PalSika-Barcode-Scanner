@@ -34,42 +34,74 @@
 
         <!-- Search Bar -->
         <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Search for products...">
+            <input type="text" id="searchInput" placeholder="Search for products...">
             <button id="search-button">Search</button>
         </div>
 
         <!-- Products Table -->
-        <table>
+        <table id="inventoryTable">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Product ID</th>
                     <th>Product Name</th>
+                    <th>Category</th>
                     <th>Total Bought QTY (Imported)</th>
                     <th>Total Sold (Exported)</th>
                     <th>Available QTY</th>
                 </tr>
             </thead>
             <tbody>
+                {% for product in products %}
                 <!-- Sample Row -->
-                <tr>
-                    <td>1</td>
-                    <td>P12345</td>
-                    <td>Product A</td>
-                    <td>100</td>
-                    <td>30</td>
-                    <td>70</td>
+                <tr id="{{ forloop.counter }}">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ product.product_id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.category }}</td>
+                    <td>{{ product.imported_qty}}</td>
+                    <td>{{ product.exported_qty}}</td>
+                    <td>
+                        <div id ="lastCellContainer" class="lastCellContainer-display">
+                            <div class="cell-width text-align-righ">{{ product.inventory_qty }}</div>
+                            <div class="show Edit-btn-note-width" id="Edit{{ forloop.counter }}" data="{{ forloop.counter }}">
+                                <button class="btn-edit" value="{{ product.product_id }}" 
+                                data-productName="{{ product.name }}" 
+                                data-importedQTY ="{{ product.imported_qty }}" 
+                                data-exportedQTY ="{{ product.imported_qty }}" 
+                                onclick="openModal(this)">Edit</button></div>
+
+                        </div>
+                        
+                    </td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>P67890</td>
-                    <td>Product B</td>
-                    <td>150</td>
-                    <td>50</td>
-                    <td>100</td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
+
+
+</div>
+<!-- Modal Structure -->
+<div id="editInventoryModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2 id="modalTitle">Edit Inventory for <span class="font-color-black">(Product Name)</span></h2>
+        </div>
+        <div class="modal-body">
+            <label for="importedQty" class="modal-label">Imported Qty:</label>
+            <input type="number" id="importedQty" class="modal-input" placeholder="Enter imported quantity">
+
+            <label for="exportedQty" class="modal-label">Exported Qty:</label>
+            <input type="number" id="exportedQty" class="modal-input" placeholder="Enter exported quantity">
+        </div>
+        <div class="modal-footer">
+            <button id="submitBtn" class="modal-btn submit-btn">Submit</button>
+            <button id="cancelBtn" class="modal-btn cancel-btn">Cancel</button>
+        </div>
+    </div>
+</div>
+
 </body>
+<script src="{% static 'Js/inventory.js' %}"></script>
 </html>
