@@ -74,7 +74,7 @@
                 </a>            
             </li>
             <li class="nav-item" role="presentation">
-                <a href="/create_new_order_card_page" class="nav-link yellow add-card">Add New Order +
+                <a href="/create_new_order_page" class="nav-link yellow add-card">Add New Order +
                     <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-card-heading" viewBox="0 0 16 16">
                         <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
                         <path d="M3 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0-5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z"/>
@@ -116,13 +116,19 @@
                             </h2>
 
                             <p>Status:<span class="fw-bold"> {{ card.order.status }}</span></p>
-                            <p>Customer:<span class="fw-bold"> {{ card.order.customer.name }}</span> 
+                            <p>Customer:<span class="fw-bold" id="customer-name-{{ card.id}}"> {{ card.order.customer.name }}</span> 
                                 <button class="btn" title="Edit Customer" data-id="{{ card.order.customer.id }}"><a href="../edit_customer_page/{{ card.order.customer.id }}" class="edit-card-link">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" data-id="{{ card.order.customer.id }}">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                                     </svg></a>
-                                </button>  </p>
+                                </button>
+                                <button class="btn" title = "Change Customer" onclick="openCustomerModal('{{ card.id }}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-credit-card-2-front-fill" viewBox="0 0 16 16">
+                                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
+                                    </svg>
+                                </button>
+                            </p>
                             <p>Phone:<span class="fw-bold"> {{ card.order.customer.phone_number }}</span></p>
                             <p>Action:<span class="fw-bold fs-3"> {{ card.order.order_type }}</span></p>
                             <p>Delivery Date:<span class="fw-bold"> {{ card.order.delivery_date }}</span></p>
@@ -188,7 +194,7 @@
         </div>
     </div>
 
-<!-- Modal Window -->
+<!-- Driver Modal Window -->
 <div id="modal-card-id" hidden></div>
 <div id="productModal" class="modal" onclick="closeModalOnClickOutside(event)">
     <div class="modal-content">
@@ -198,17 +204,43 @@
         <div style="position: relative;">
 
             <!-- Search for driver -->
-            <input type="text" id="productSearchInput" placeholder="Search for a Driver Name..." oninput="filterProducts()"> 
+            <input type="text" id="driverSearchInput" placeholder="Search for a Driver Name..." oninput="filterDrivers()"> 
             <a class="mt-3 mb-3 link_newDriver" href="../create_new_driver_page/">+ New Driver</a>
             <select id="modalProductSelect" required size="5" style="width: 100%; margin-top: 5px;">
                 {% for Driver in delivery %}
-                <option id="{{ Driver.id }}" value="{{ Driver.id }}">{{ Driver.driver_name }}</option>
+                <option id="{{ Driver.id }}" value="{{ Driver.id }}" class="Drivers" data-driver-name="{{ Driver.driver_name }}">{{ Driver.driver_name }}</option>
                 {% endfor %}
             </select>
         </div>
 
         
         <button id="modal-change-driver" type="button" data-modal-card-id="" class="save-product-btn" onclick="changeDriver(this)">Select Driver</button>
+        
+    </div>
+</div>
+</div>
+
+<!-- Customer Modal Window -->
+<div id="modal-card-id" hidden></div>
+<div id="customerModal" class="modal" onclick="closeCustomerModalOnClickOutside(event)">
+    <div class="modal-content modal-content-customer">
+        <span class="close-btn" onclick="closeCustomerModal()">&times;</span>
+        <h2>Choose a Customer</h2>
+        <label for="modalCustomerSelect">Customer Name</label>
+        <div style="position: relative;">
+
+            <!-- Search for Customer -->
+            <input type="text" id="productSearchInput" placeholder="Search for a Driver Name..." oninput="filterCustomers()"> 
+            <a disabled class="mt-3 mb-3 link_newDriver" href="../create_new_driver_page/" >+ New Customer</a>
+            <select id="modalCustomerSelect" required size="5" style="width: 100%; margin-top: 5px;">
+                {% for customer in customers %}
+                <option id="{{ customer.id }}" value="{{ customer.id }}">{{ customer.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        
+        <button id="modal-change-customer" type="button" data-modal-card-id="" class="save-product-btn" onclick="changeCustomer(this)">Select Customer</button>
         
     </div>
 </div>
@@ -374,6 +406,78 @@ function filterOrders(status) {
                 <p>Phone:<span class="fw-bold"> ${data.driver_phone}</span></p>
             `;
             closeModal();
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+//------------------------------------------- Search for Drivers function----------------------
+function filterDrivers() {
+            const input = document.getElementById('driverSearchInput').value.toLowerCase();
+            const drivers = document.querySelectorAll('.Drivers');
+            console.log(drivers);
+            drivers.forEach(card => {
+                const driverName = card.getAttribute('data-driver-name').toLocaleLowerCase();
+
+
+                if (driverName.includes(input)) {
+                    card.classList.remove('d-none'); // Show card by removing 'd-none'
+                    card.classList.add('d-flex');    // Ensure 'd-flex' is added
+                } else {
+                    card.classList.remove('d-flex'); // Hide card by removing 'd-flex'
+                    card.classList.add('d-none');    // Ensure 'd-none' is added
+                }
+            });
+        }
+// ------------------------------------------CUSTOMER MODAL-------------------------------------
+function openCustomerModal(cardID){
+    // console.log(cardID);
+    document.getElementById("customerModal").style.display = "flex";
+            btn = document.getElementById("modal-change-customer");
+            // console.log(btn);
+            btn.setAttribute("data-modal-card-id",cardID);
+
+}
+
+//  Close Modal Function
+function closeCustomerModal() {
+            document.getElementById("customerModal").style.display = "none";
+        }
+        // Close Modal when clicking on the background
+        function closeCustomerModalOnClickOutside(event) {
+        const modalContent = document.querySelector(".modal-content-customer");
+        if (!modalContent.contains(event.target)) {
+            closeCustomerModal();
+        }
+    }
+
+// Change Customer Name function [Including Ajax Post Request]
+function changeCustomer(buttonElement) {
+    // Get the selected customer ID from the dropdown
+    const customerSelect = document.getElementById('modalCustomerSelect');
+    const selectedCustomerID = customerSelect.value; // Gets the value of the selected <option>
+
+    // Get the card ID from the button's data attribute
+    const cardId = buttonElement.getAttribute('data-modal-card-id');
+
+    // Now you have both cardId and selectedDriverId to send in your AJAX request
+    const url = `../order_page_assign_new_customer/`;
+
+    // Example AJAX request (adjust URL and data as needed)
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken') // For Django CSRF token
+        },
+        body: JSON.stringify({ cardID: cardId, newCustomerID: selectedCustomerID })
+    })
+    .then(response => response.json())
+    .then(data => {
+// Update only the "Customer Name Section" part with the new data
+    const customerInfoElement = document.getElementById(`customer-name-${cardId}`);
+        customerInfoElement.innerHTML = `${data.customer_name}`;
+            closeCustomerModal();
     })
     .catch(error => console.error('Error:', error));
 }

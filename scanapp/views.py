@@ -322,10 +322,12 @@ def orders_page(request):
     orders_cards = OrderCard.objects.select_related('order', 'delivery', 'order__customer').order_by('-created_date', '-id')
 
     delivery = Delivery.objects.all()
+    customers = Customer.objects.all()
     
     context = {
         'orders_cards': orders_cards,
         'delivery': delivery,
+        'customers': customers,
     }
     return render(request, 'orders_page.html', context)
 
@@ -383,6 +385,34 @@ def order_page_assign_new_driver(request):
     print(response_data)
     return JsonResponse(response_data)
 
+def order_page_assign_new_customer(request):
+    if request.method == 'POST':
+        '''
+        Django expects data in request.POST when using application/json content-type.
+        Django’s request.POST dictionary only works with application/x-www-form-urlencoded or multipart/form-data, so
+        when using application/json, you need to parse the JSON data from the request body manually.
+        '''
+        data = json.loads(request.body)
+        cardID = data.get("cardID")
+        newCustomerID = data.get("newCustomerID")
+        
+        # print(f"CardID: {cardID} / NewDriverID: {newDriverID}")
+        # Get card and driver instances
+        card = get_object_or_404(OrderCard, id=cardID)
+        new_customer = get_object_or_404(Customer, id=newCustomerID)
+        # print(card)
+        # print(new_driver.driver_name)
+        # Assign new driver to card
+        print(f"New customer is : {new_customer}")
+        card.order.customer = new_customer
+        card.order.save()
+        # card.save()
+        
+    response_data = {
+        'customer_name': card.order.customer.name,
+    }
+    print(response_data)
+    return JsonResponse(response_data)
 
 def create_new_driver_page(request):
     return render(request, "create_new_driver_page.html")
