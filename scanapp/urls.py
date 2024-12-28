@@ -21,6 +21,8 @@ urlpatterns = [
     path('add_driver_process/', views.add_driver_process, name='add_driver_process'),
     path('edit_driver_page/<int:driver_id>/', views.edit_driver_page, name='edit_driver_page'),
     path('edit_driver_process/<int:driver_id>/', views.edit_driver_process, name='edit_driver_process'),
+    path('create_new_customer_page/', views.create_new_customer_page, name='create_new_customer_page'),
+    path('create_new_customer_process/', views.create_new_customer_process, name='create_new_customer_process'),
     path('edit_customer_page/<int:customerID>/', views.edit_customer_page, name='edit_customer_page'),
     path('edit_customer_process/<int:customerID>/', views.edit_customer_process, name='edit_customer_process'),
     path('edit_order_card_page/<int:order_card_id>/', views.edit_order_card_page, name='edit_order_card_page'),
@@ -36,6 +38,7 @@ urlpatterns = [
     path('inventory_page/', views.inventory_page, name='inventory_page'),
     path('reset_all_inv_qty/', views.reset_all_inv_qty, name='reset_all_inv_qty'),
     path('edit_inventory_request/', views.edit_inventory_request, name='edit_inventory_request'),
+    # path('sold_products_page/', views.sold_products_page, name='sold_products_page'),
 
 
 ]

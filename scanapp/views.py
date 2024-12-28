@@ -7,11 +7,14 @@ from django.utils.timezone import now
 from django.utils import timezone
 from django.db.models import Sum, Count
 from datetime import timedelta
+from datetime import date
+from datetime import datetime
 from django.shortcuts import get_object_or_404
 import json
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.forms.models import model_to_dict  # Use for more control
+from django.core.exceptions import ObjectDoesNotExist
 
 def index(request):
     return render(request, 'index.html')
@@ -131,7 +134,7 @@ def get_all_orders():
 
 def get_orders_for_current_month():
     # Get the current month and year
-    now = datetime.datetime.now()
+    now = datetime.now()
     current_year = now.year
     current_month = now.month
 
@@ -491,8 +494,29 @@ def edit_driver_process(request, driver_id):
         driver.save()
         
         messages.success(request, "Driver details updated successfully!")
-        return redirect("orders_dashboard_page")
+        return redirect("orders_page")
+# ----------- Create New Customer Page
+def create_new_customer_page(request):
+    return render(request, 'create_new_customer_page.html')
 
+# ------------ Create New Customer Process
+
+def create_new_customer_process(request):
+    if request.method == "POST":
+        customerName = request.POST.get("customer_name")
+        customerPhone = request.POST.get("phone_number")
+        customerEmail = request.POST.get("email")
+        customerNote = request.POST.get("notes")
+        customerAddress = request.POST.get("address")
+
+        Customer.objects.create(
+            name = customerName,
+            phone_number = customerPhone,
+            address = customerAddress,
+            email = customerEmail,
+            notes = customerNote,
+        )
+        return redirect("orders_page")
 # ----------Edit Customer Page and Process----------------------------
 def edit_customer_page(request, customerID):
     customer = get_object_or_404(Customer, id=customerID)
@@ -939,22 +963,58 @@ def reset_all_inv_qty(request):
     return redirect ("inventory_page")
 
 
+
 def edit_inventory_request(request):
+    try:
+        # Retrieve POST data
+        productID = request.POST.get("formProductID")
+        importedQty = request.POST.get("importedQty")
+        exportedQty = request.POST.get("exportedQty")
+        warningLimit = request.POST.get("setWarningLimit")
 
-    productID = request.POST.get("formProductID")
-    importedQty = request.POST.get("importedQty")
-    exportedQty = request.POST.get("exportedQty")
-    print(f"I got Product ID: {productID}")
-    # Get the product using ID
-    product = Product.objects.get(product_id = productID)
-    print(f"This is the product from the database: {product} ")
-    # Edit the values of the imported and exported Qty
-    product.imported_qty = importedQty
-    product.exported_qty = exportedQty
-    product.inventory_qty = int(importedQty) - int(exportedQty)
-    product.save()
-    return redirect ("inventory_page")
+        # Validate inputs
+        # if not all([productID, importedQty, exportedQty, abs(warningLimit)]):
+        #     return JsonResponse({'error': 'All fields are required.'}, status=400)
 
+        # if not (importedQty.isdigit() and exportedQty.isdigit() and warningLimit.isdigit()):
+        #     return JsonResponse({'error': 'Quantities and warning limit must be valid integers.'}, status=400)
+
+        # Retrieve product from the database
+        product = Product.objects.get(product_id=productID)
+        # print(f"Product retrieved: {product}")
+
+        # Update product fields
+        product.imported_qty = int(importedQty)
+        product.exported_qty = int(exportedQty)
+        product.inventory_qty = int(importedQty) - int(exportedQty)
+        product.inventory_lower_limit = int(warningLimit)
+
+        # Save changes
+        product.save()
+
+        return JsonResponse({
+            'message': 'Product updated successfully',
+            'product': {
+                'product_id': product.product_id,
+                'imported_qty': product.imported_qty,
+                'exported_qty': product.exported_qty,
+                'inventory_qty': product.inventory_qty,
+                'inventory_lower_limit': product.inventory_lower_limit,
+            }
+        })
+    except ObjectDoesNotExist:
+        return JsonResponse({'error': 'Product not found.'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': f'An unexpected error occurred: {str(e)}'}, status=500)
+
+# def sold_products_page(request):
+#     products = Product.objects.all()
+#     today = datetime.now().strftime("%Y-%m-%d")
+#     context = {
+#         "products" : products,
+#         "today": today,
+#     }
+#     return render(request, "sold_products_page.html", context)
 
 # # Process: Delete
 # def remove_order_list(request,order_id):

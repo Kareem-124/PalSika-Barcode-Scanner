@@ -45,6 +45,7 @@
                     <th>#</th>
                     <th>Product ID</th>
                     <th>Product Name</th>
+                    <th>Limit</th>
                     <th>Category</th>
                     <th>Total Bought QTY (Imported)</th>
                     <th>Total Sold (Exported)</th>
@@ -54,10 +55,11 @@
             <tbody>
                 {% for product in products %}
                 <!-- Sample Row -->
-                <tr id="{{ forloop.counter }}">
+                <tr id="{{ forloop.counter }}" data-lowerLimit="{{ product.inventory_lower_limit }}">
                     <td>{{ forloop.counter }}</td>
                     <td>{{ product.product_id }}</td>
                     <td>{{ product.name }}</td>
+                    <td id="limit_{{ forloop.counter }}">{{ product.inventory_lower_limit }}</td>
                     <td>{{ product.category }}</td>
                     <td>{{ product.imported_qty}}</td>
                     <td>{{ product.exported_qty}}</td>
@@ -65,11 +67,13 @@
                         <div id ="lastCellContainer" class="lastCellContainer-display">
                             <div class="cell-width text-align-righ">{{ product.inventory_qty }}</div>
                             <div class="show Edit-btn-note-width" id="Edit{{ forloop.counter }}" data="{{ forloop.counter }}">
-                                <button class="btn-edit" value="{{ product.product_id }}" 
+                                <button id = "edit-btn-{{ forloop.counter }}" class="btn-edit" value="{{ product.product_id }}" 
                                 data-productName="{{ product.name }}" 
                                 data-productID = "{{ product.product_id }}" 
                                 data-importedQTY ="{{ product.imported_qty }}" 
                                 data-exportedQTY ="{{ product.exported_qty }}" 
+                                data-inventoryLimit ="{{ product.inventory_lower_limit }}" 
+                                data-rowNumber ="{{ forloop.counter }}" 
                                 onclick="openModal(this)">Edit</button></div>
 
                         </div>
@@ -102,15 +106,22 @@
 
                 <label for="exportedQty" class="modal-label">Exported Qty:</label>
                 <input type="number" id="exportedQty" class="modal-input" placeholder="Enter exported quantity" name="exportedQty">
+
+                <label for="setWarningLimit" class="modal-label">Warning Limit At:</label>
+                <input type="number" id="setWarningLimit" class="modal-input" placeholder="Provide a minimum number before warning" name="warningLimit" value="">
+
             </div>
             <div class="modal-footer">
-                <button id="submitBtn" type="submit" class="modal-btn submit-btn">Submit</button>
+                <button id="submitBtn" type="button" onclick="submitModal(this)" class="modal-btn submit-btn" data-rowNumber="" data-csrf= '{% csrf_token %}'>Submit</button>
                 <button type="button" id="cancelBtn" class="modal-btn cancel-btn">Cancel</button>
             </div>
         </div>
     </form>
 </div>
 
+
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 <script src="{% static 'Js/inventory.js' %}"></script>
 </html>

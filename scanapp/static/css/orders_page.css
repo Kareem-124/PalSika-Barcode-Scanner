@@ -6,7 +6,7 @@ body {
 }
 
 .container {
-    max-width: 80rem !important;
+    max-width: 90rem !important;
     margin-left: 25rem !important;
 
     padding: 20px;
@@ -20,7 +20,8 @@ h1 {
     margin-bottom: 30px;
 }
 .add-card {
-margin-left: 2rem !important;
+margin-left: 1rem !important;
+font-size: 15px;
 
 }
 .add-card:hover{
@@ -116,6 +117,13 @@ margin-left: 2rem !important;
     height: 6rem;
     margin-left: 2.5rem;
     margin-right: 2rem;
+}
+.vl-black {
+    background: linear-gradient(#c0bfbf, #dddcdc);
+    width: 0.125rem;
+    height: 2.25rem;
+    margin-left: 8rem;
+    margin-right: 0.1rem;
 }
 .vl-2 {
     background: linear-gradient(#ffff80, #ead5ac);
@@ -384,7 +392,7 @@ h2 .btn:hover {
 .side-menu .add-card {
     background-color: #ffba00;
     color: #fff;
-    padding: 10px;
+    padding: 5px;
     text-align: center;
     border-radius: 4px;
     cursor: pointer;

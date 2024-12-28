@@ -1,22 +1,28 @@
     document.addEventListener('DOMContentLoaded', function () {
-        console.log("HI 1");
+        
         const searchInput = document.getElementById('searchInput');
         const tableRows = document.querySelectorAll('#inventoryTable tbody tr');
                 // Highlight rows with less than 10 products available
                 tableRows.forEach(row => {
+                    let lowerLimit = row.getAttribute("data-lowerLimit");
+                    
+
                     const availableQty = parseInt(row.querySelector('td:nth-child(7)').textContent, 10); // 7th column
-                    if (!isNaN(availableQty) && availableQty < 10) {
-                        row.style.backgroundColor = '#f8d7da'; // Light red background
-                        row.style.color = '#842029'; // Dark red text
+                    if (!isNaN(availableQty) && availableQty <= lowerLimit) {
+                        // row.style.backgroundColor = '#f8d7da'; // Light red background
+                        // row.style.color = '#842029'; // Dark red text
+                        row.setAttribute("class","red");
                     }
                 });
+
                 
         searchInput.addEventListener('input', function () {
             const searchTerm = searchInput.value.toLowerCase();
             
 
             tableRows.forEach(row => {
-                // Get text content of the 'Product Name' and 'Category' columns
+                
+                // Get text content of the ''Product ID', Product Name', 'Category', and 'lowerLimit' columns
                 const productID = row.querySelector('td:nth-child(2)').textContent.toLowerCase(); // 3rd column
                 const productName = row.querySelector('td:nth-child(3)').textContent.toLowerCase(); // 3rd column
                 const category = row.querySelector('td:nth-child(4)').textContent.toLowerCase();    // 4th column
@@ -65,6 +71,30 @@
 
     });
 
+    function rowHighlightCheck(rowNumber,dataLimit){
+        const searchInput = document.getElementById('searchInput');
+        const tableRows = document.querySelectorAll('#inventoryTable tbody tr');
+        // Highlight rows with less than 10 products available
+        row = (tableRows[rowNumber-1]);
+        console.log(row);
+            let lowerLimit = dataLimit;
+            
+            const availableQty = parseInt(row.querySelector('td:nth-child(7)').textContent, 10); // 7th column
+            if (!isNaN(availableQty) && availableQty <= lowerLimit) {
+                // console.log("I must change to red");
+                // row.style.backgroundColor = '#f8d7da'; // Light red background
+                // row.style.color = '#842029'; // Dark red text
+                row.setAttribute("class","red");
+                // console.log(row);
+            }
+            else{
+                row.removeAttribute("style");
+                row.removeAttribute("class");
+            }
+            
+
+
+}
 // Select modal and related elements
 const modal = document.getElementById('editInventoryModal');
 const modalTitle = document.getElementById('modalTitle');
@@ -73,6 +103,7 @@ const exportedQty = document.getElementById('exportedQty');
 const submitBtn = document.getElementById('submitBtn');
 const cancelBtn = document.getElementById('cancelBtn');
 const formProductID = document.getElementById('formProductID')
+const setWarningLimit = document.getElementById('setWarningLimit')
 
 // Function to open the modal
 function openModal(button) {
@@ -81,13 +112,17 @@ function openModal(button) {
     const productName = button.getAttribute('data-productName');
     const importedValue = button.getAttribute('data-importedQTY');
     const exportedValue = button.getAttribute('data-exportedQTY');
+    const inventoryLimit = button.getAttribute('data-inventoryLimit');
+    const rowNumber = button.getAttribute('data-rowNumber');
     
     // Set modal content
-    console.log(modalTitle)
+    // console.log(modalTitle)
     modalTitle.childNodes[1].textContent = `(${productName})`;
     formProductID.value = productID;
     importedQty.value = importedValue || '';
     exportedQty.value = exportedValue || '';
+    setWarningLimit.value = inventoryLimit || '';
+    submitBtn.value = rowNumber || '';
 
     // Display modal
     modal.style.display = 'flex'; // Change to flex to apply centering
@@ -99,16 +134,16 @@ function closeModal() {
 }
 
 // Submit button action
-submitBtn.addEventListener('click', function () {
-    const importedValue = importedQty.value;
-    const exportedValue = exportedQty.value;
+// submitBtn.addEventListener('click', function () {
+//     const importedValue = importedQty.value;
+//     const exportedValue = exportedQty.value;
 
-    // Log the submitted data (or handle it as needed)
-    console.log(`Submitted Imported: ${importedValue}, Exported: ${exportedValue}`);
+//     // Log the submitted data (or handle it as needed)
+//     console.log(`Submitted Imported: ${importedValue}, Exported: ${exportedValue}`);
     
-    // Close modal after submission
-    closeModal();
-});
+//     // Close modal after submission
+//     closeModal();
+// });
 
 // Cancel button action
 cancelBtn.addEventListener('click', closeModal);
@@ -121,6 +156,44 @@ window.addEventListener('click', function (event) {
 });
 
 
+function submitModal(element){
+
+
+    const rowNumber = document.getElementById("submitBtn").value;
+    const csrf_token = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    const importedQty = document.getElementById('importedQty');
+    const exportedQty = document.getElementById('exportedQty');
+    const formProductID = document.getElementById('formProductID'); // product ID
+    const setWarningLimit = document.getElementById('setWarningLimit');// Lower Limit
+    url = `../edit_inventory_request/`;
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            "formProductID": formProductID.value,
+            "importedQty": importedQty.value,
+            "exportedQty": exportedQty.value,
+            "setWarningLimit": setWarningLimit.value,
+            "csrfmiddlewaretoken": csrf_token, // Ensuring CSRF token is included
+        },
+        dataType: "json", // Specify expected response type
+        success: function(response) {
+            // console.log(`Row Number: ${rowNumber}`);
+            // console.log("Response:", response);
+            const dataLimit = response.product.inventory_lower_limit;
+            document.getElementById(`limit_${rowNumber}`).innerText = dataLimit;
+            const editButton = document.getElementById(`edit-btn-${rowNumber}`);
+            editButton.setAttribute("data-inventoryLimit",dataLimit);
+            rowHighlightCheck(rowNumber,dataLimit);
+            closeModal();
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX Error:", status, error);
+            alert("An error occurred while updating the product.");
+        }
+    });
+    
+}
 
 
 

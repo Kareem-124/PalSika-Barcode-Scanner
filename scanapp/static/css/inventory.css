@@ -200,3 +200,11 @@ table tr:hover {
     color: black;
 }
 
+.red{
+    background-color:  #f8d7da !important;
+    color: #842029;
+}
+.red:hover{
+    background-color: #f5c2c7  !important;
+}
+

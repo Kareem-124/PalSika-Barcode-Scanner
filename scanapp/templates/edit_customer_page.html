@@ -13,11 +13,7 @@
         <h1>Edit Customer Information</h1>
         <form action="{% url 'edit_customer_process' customer.id %}" method="POST" class="driver-form" dir="rtl">
             {% csrf_token %}
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} color-red">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
+
             
             <label for="customerName">Customer Name</label>
             <input type="text" id="driverName" name="customer_name" placeholder="أدخل اسم الزبون..." value="{{ customer.name }}" required>
