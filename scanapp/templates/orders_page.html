@@ -101,6 +101,17 @@
             </li>
         </ul>
 
+        <ul class="nav nav-tabs mt-4 " id="orderStatusTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+
+                <div class=" form-check form-switch">
+                    
+                    <label class="form-check-label yellow fs-4 ml-3" for="showAllCards">Show All Details</label>
+                    <input class="form-check-input fs-4 ml-3" type="checkbox" id="showAllCards" disabled>
+                </div>
+
+            </li>
+        </ul>
         <div class="orders-list mt-4">
 
             {% for card in orders_cards %}
@@ -182,7 +193,17 @@
                     </div> -->
                     
                     <div class="order-footer">
-                        <button class="details-btn yellow-bg-btn fw-bold" id="{{ forloop.counter }}" data-orderID="{{ card.order.id }}" onclick="get_ordered_products(this)" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ card.order.id }}" aria-expanded="false" aria-controls="collapseExample">View Details</button>
+                        <button class="details-btn yellow-bg-btn fw-bold"
+                        id="{{ forloop.counter }}" 
+                        data-orderID="{{ card.order.id }}" 
+                        onload="get_ordered_products(this)"
+                        onclick="get_ordered_products(this)"
+                        
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#collapseExample{{ card.order.id }}" 
+                        aria-expanded="false" 
+                        aria-controls="collapseExample">View Details</button>
+                        
                     </div>
                     <div class="collapse mt-3" id="collapseExample{{ card.order.id }}">
                         <table class="product-table">
@@ -247,7 +268,7 @@
 
 <!-- Customer Modal Window -->
 <div id="modal-card-id" hidden></div>
-<div id="customerModal" class="modal" onclick="closeCustomerModalOnClickOutside(event)">
+<div id="customerModal" class="modal"  onclick="closeCustomerModalOnClickOutside(event)">
     <div class="modal-content modal-content-customer">
         <span class="close-btn" onclick="closeCustomerModal()">&times;</span>
         <h2>Choose a Customer</h2>
@@ -270,7 +291,7 @@
     </div>
 </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script>
 
 // Tabs filtering section
@@ -293,69 +314,70 @@ function filterOrders(status) {
     });
 }
 
-        function searchOrders() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
-            const orderCards = document.querySelectorAll('.order-card');
+function searchOrders() {
+    const input = document.getElementById('searchInput').value.toLowerCase();
+    const orderCards = document.querySelectorAll('.order-card');
 
-            orderCards.forEach(card => {
-                const orderId = card.getAttribute('data-id');
-                const customerName = card.getAttribute('data-customer');
+    orderCards.forEach(card => {
+        const orderId = card.getAttribute('data-id');
+        const customerName = card.getAttribute('data-customer');
 
-                if (orderId.includes(input) || customerName.includes(input)) {
-                    card.classList.remove('d-none'); // Show card by removing 'd-none'
-                    card.classList.add('d-flex');    // Ensure 'd-flex' is added
-                } else {
-                    card.classList.remove('d-flex'); // Hide card by removing 'd-flex'
-                    card.classList.add('d-none');    // Ensure 'd-none' is added
-                }
-            });
+        if (orderId.includes(input) || customerName.includes(input)) {
+            card.classList.remove('d-none'); // Show card by removing 'd-none'
+            card.classList.add('d-flex');    // Ensure 'd-flex' is added
+        } else {
+            card.classList.remove('d-flex'); // Hide card by removing 'd-flex'
+            card.classList.add('d-none');    // Ensure 'd-none' is added
         }
+    });
+}
 
-        function get_ordered_products(element) {
-            const orderId = element.getAttribute('data-orderID');
-            const url = `../order_page_products_request/${orderId}`;
-        
-            fetch(url, {
-                headers: {
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const productList = document.getElementById(data.table_id);
-                    productList.innerHTML = '';
+function get_ordered_products(element) {
+    console.log("onload funcion!")
+    const orderId = element.getAttribute('data-orderID');
+    const url = `../order_page_products_request/${orderId}`;
 
-                    if (data.products.length > 0) {
-                        data.products.forEach(product => {
-                            const productItem = document.createElement('tr');
-                            productItem.innerHTML = `
-                                <td>${product.product_id}</td>
-                                <td>${product.product_name}</td>
-                                <td>${product.quantity}</td>
-                                <td>${product.price}</td>
-                                <td>${product.discount}</td>
-                                <td>${product.total_price}</td>
-                            `;
-                            productList.appendChild(productItem);
-                        });
-                    } else {
-                        productList.textContent = 'No products found for this order.';
-                    }
-                    
-                                    // Scroll to the element's position after populating the table
-                const detailsSection = document.getElementById(`collapseExample${orderId}`);
-                detailsSection.scrollIntoView({ behavior: 'smooth', block:"center" });
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
+    fetch(url, {
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const productList = document.getElementById(data.table_id);
+            productList.innerHTML = '';
+
+            if (data.products.length > 0) {
+                data.products.forEach(product => {
+                    const productItem = document.createElement('tr');
+                    productItem.innerHTML = `
+                        <td>${product.product_id}</td>
+                        <td>${product.product_name}</td>
+                        <td>${product.quantity}</td>
+                        <td>${product.price}</td>
+                        <td>${product.discount}</td>
+                        <td>${product.total_price}</td>
+                    `;
+                    productList.appendChild(productItem);
                 });
-        }
+            } else {
+                productList.textContent = 'No products found for this order.';
+            }
+            
+                            // Scroll to the element's position after populating the table
+        // const detailsSection = document.getElementById(`collapseExample${orderId}`);
+        // detailsSection.scrollIntoView({ behavior: 'smooth', block:"center" });
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
 // Modals Functions
         // Open Modal Function
         function openModal(cardID) {
@@ -506,6 +528,30 @@ function changeCustomer(buttonElement) {
     })
     .catch(error => console.error('Error:', error));
 }
+document.addEventListener("DOMContentLoaded", function () {
+    // Select all buttons with the class 'details-btn'
+    const buttons = document.querySelectorAll(".details-btn");
+    
+
+    // Loop through each button and trigger the function
+    buttons.forEach(button => {
+        get_ordered_products(button);
+    });
+    $("#showAllCards").removeAttr("disabled");
+});
+
+$(document).ready(function(){
+    $("#showAllCards").click(function(){
+        const checkbox = $("#showAllCards");
+        if (checkbox.prop("checked"))
+        $("div.collapse").addClass("show");
+    else{
+        $("div.collapse").removeClass("show");
+    }
+    });
+    
+});
+
 
     </script>
 
