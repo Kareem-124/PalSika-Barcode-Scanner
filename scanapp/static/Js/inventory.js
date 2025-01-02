@@ -7,15 +7,18 @@
                     let lowerLimit = row.getAttribute("data-lowerLimit");
                     
 
-                    const availableQty = parseInt(row.querySelector('td:nth-child(7)').textContent, 10); // 7th column
+                    const availableQty = parseInt(row.querySelector('td:nth-child(8)').textContent, 10); // 7th column
                     if (!isNaN(availableQty) && availableQty <= lowerLimit) {
                         // row.style.backgroundColor = '#f8d7da'; // Light red background
                         // row.style.color = '#842029'; // Dark red text
                         row.setAttribute("class","red");
                     }
+                    else{
+                        row.classList.remove("red");
+                    }
                 });
 
-                
+                // Search for products function ---------------------------------------
         searchInput.addEventListener('input', function () {
             const searchTerm = searchInput.value.toLowerCase();
             
@@ -72,14 +75,15 @@
     });
 
     function rowHighlightCheck(rowNumber,dataLimit){
-        const searchInput = document.getElementById('searchInput');
+
         const tableRows = document.querySelectorAll('#inventoryTable tbody tr');
         // Highlight rows with less than 10 products available
         row = (tableRows[rowNumber-1]);
         console.log(row);
             let lowerLimit = dataLimit;
             
-            const availableQty = parseInt(row.querySelector('td:nth-child(7)').textContent, 10); // 7th column
+            const availableQty = parseInt(row.querySelector('td:nth-child(8)').textContent); // 7th column
+
             if (!isNaN(availableQty) && availableQty <= lowerLimit) {
                 // console.log("I must change to red");
                 // row.style.backgroundColor = '#f8d7da'; // Light red background
@@ -89,12 +93,13 @@
             }
             else{
                 row.removeAttribute("style");
-                row.removeAttribute("class");
+                row.classList.remove("red");
             }
             
 
 
 }
+
 // Select modal and related elements
 const modal = document.getElementById('editInventoryModal');
 const modalTitle = document.getElementById('modalTitle');
@@ -125,12 +130,17 @@ function openModal(button) {
     submitBtn.value = rowNumber || '';
 
     // Display modal
-    modal.style.display = 'flex'; // Change to flex to apply centering
+
+    // modal.style.display = 'flex'; // Change to flex to apply centering
+    modal.classList.remove("hide-modal");
+    modal.classList.add("show-modal");
 }
 
 // Function to close the modal
 function closeModal() {
-    modal.style.display = 'none';
+    // modal.style.display = 'none';
+    modal.classList.remove("show-modal");
+    modal.classList.add("hide-modal");
 }
 
 // Submit button action
@@ -181,9 +191,25 @@ function submitModal(element){
             // console.log(`Row Number: ${rowNumber}`);
             // console.log("Response:", response);
             const dataLimit = response.product.inventory_lower_limit;
+            const productQTY = response.product.inventory_qty;
+            const importedQTY = response.product.imported_qty;
+            const exportedQTY = response.product.exported_qty;
+            // update the imported qty / exported qty / limit qty /and available qty felids in the selected row
+            document.getElementById(`importedQTY_${rowNumber}`).innerText = importedQTY;
+            document.getElementById(`exportedQTY_${rowNumber}`).innerText = exportedQTY;
+            document.getElementById(`availableQTY_${rowNumber}`).innerText = productQTY;
             document.getElementById(`limit_${rowNumber}`).innerText = dataLimit;
+            // update the data in the 'edit' button: 
+            // ```
+            // The Edit button will transfer the data to the modal, so we are required to 
+            // update the data after the return of the JSON request to make sure the modal
+            // is updated when we open it next time.
+            // ```
             const editButton = document.getElementById(`edit-btn-${rowNumber}`);
+            editButton.setAttribute("data-importedQTY",importedQTY);
+            editButton.setAttribute("data-exportedQTY",exportedQTY);
             editButton.setAttribute("data-inventoryLimit",dataLimit);
+
             rowHighlightCheck(rowNumber,dataLimit);
             closeModal();
         },
@@ -194,6 +220,32 @@ function submitModal(element){
     });
     
 }
+
+document.addEventListener("keydown", function (event) {
+    // Check if the Enter key is pressed
+    // console.log(event.key);
+    if (event.key === "Enter") {
+        // Prevent the default action if necessary (e.g., form submission)
+        event.preventDefault();
+        
+        // Trigger the form's submit button
+        const submitButton = document.querySelector("#submitBtn[type='button']");
+        const modal = document.getElementById("editInventoryModal");
+
+        if (modal && modal.classList.contains("show-modal")) {
+            submitButton.click();
+        }
+    }
+    else if (event.key === "Escape"){
+                // Prevent the default action if necessary (e.g., form submission)
+                event.preventDefault();
+                closeModal();
+    }
+    else{
+        return
+    }
+    
+});
 
 
 

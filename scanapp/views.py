@@ -32,11 +32,21 @@ def scan_barcode(request, code):
         return JsonResponse({"error": "Product not found", "product_id": code}, status=404)
 
 def add_product_page(request, product_id='N/A'):
+    nextID = Status.objects.get(id=1)
+    print(type(nextID.next_id))
     if product_id == 'N/A':
-        return render(request, 'add_product.html')
+        
+        context = {
+            'nextID' : nextID.next_id,
+        }
+        return render(request, 'add_product.html',context)
         
     else:
-        return render(request, 'add_product.html', {'product_id': product_id})
+        context = {
+            'nextID' : nextID.next_id,
+            'product_id': product_id
+        }
+        return render(request, 'add_product.html', context)
         
 
 # Process: Adding new Product
@@ -57,7 +67,11 @@ def add_product(request):
             category = category,
             notes=notes,
         )
-        return redirect('/')
+        nextID = Status.objects.get(id=1)
+        nextID.next_id += 1
+        nextID.save()
+
+        return redirect('/search_for_product_page')
 
 # Render Edit Product Page 'edit_product.html'
 def edit_product_page(request,product_id):
@@ -215,15 +229,18 @@ def get_pending_orders_by_delivery_date():
 def get_top_products_for_current_month():
     # Get the current month
     today = now().date()
+    print(f"Todays date: {today}")
     start_of_month = today.replace(day=1)
+    print(f"Start date: {start_of_month}")
     end_of_month = today.replace(day=28) + timedelta(days=4)  # Ensures last day of the month
-
+    print(f"End date: {end_of_month}")
     # Filter orders within the current month based on delivery_date
     orders_in_current_month = Order.objects.filter(
         delivery_date__gte=start_of_month,
         delivery_date__lte=end_of_month,
-        order_type='sell'
+        order_type='Sell'
     )
+    print(f"These are the orders in this month: {orders_in_current_month}")
     
     # Aggregate product data: name, number of orders, and total quantity for each product
     product_data = (OrderItem.objects
@@ -231,7 +248,7 @@ def get_top_products_for_current_month():
                     .values('product__name')  # Group by product name
                     .annotate(total_qty=Sum('quantity'), num_orders=Count('order', distinct=True))  # Sum of quantities, count of orders
                     .order_by('-total_qty')[:5])  # Order by total quantity, limit to 5
-    
+    print(f"These are the products: {product_data}")
     return product_data
 
 def create_new_order_page(request):

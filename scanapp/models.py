@@ -27,6 +27,9 @@ class Customer(models.Model):
     
     def __str__(self):
         return self.name
+    
+class Status(models.Model):
+    next_id = models.IntegerField(default=0)
 
 
 # Orders Table

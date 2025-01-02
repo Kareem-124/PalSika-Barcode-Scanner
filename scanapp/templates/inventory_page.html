@@ -61,11 +61,11 @@
                     <td>{{ product.name }}</td>
                     <td id="limit_{{ forloop.counter }}">{{ product.inventory_lower_limit }}</td>
                     <td>{{ product.category }}</td>
-                    <td>{{ product.imported_qty}}</td>
-                    <td>{{ product.exported_qty}}</td>
+                    <td id = "importedQTY_{{ forloop.counter }}">{{ product.imported_qty}}</td>
+                    <td id = "exportedQTY_{{ forloop.counter }}">{{ product.exported_qty}}</td>
                     <td>
                         <div id ="lastCellContainer" class="lastCellContainer-display">
-                            <div class="cell-width text-align-righ">{{ product.inventory_qty }}</div>
+                            <div class="cell-width text-align-righ" id="availableQTY_{{ forloop.counter }}">{{ product.inventory_qty }}</div>
                             <div class="show Edit-btn-note-width" id="Edit{{ forloop.counter }}" data="{{ forloop.counter }}">
                                 <button id = "edit-btn-{{ forloop.counter }}" class="btn-edit" value="{{ product.product_id }}" 
                                 data-productName="{{ product.name }}" 

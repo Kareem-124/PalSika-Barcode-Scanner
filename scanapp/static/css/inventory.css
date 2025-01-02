@@ -111,6 +111,12 @@ table tr:hover {
 .show{
     display: none;
 }
+.hide-modal{
+    display: none !important;
+}
+.show-modal{
+    display: flex !important;
+}
 
 /* Modal Overlay */
 .modal-overlay {

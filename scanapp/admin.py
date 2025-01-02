@@ -65,3 +65,8 @@ class OrderCardAdmin(admin.ModelAdmin):
     search_fields = ('order__customer__name', 'delivery__driver_name')  # Assuming `Order` is linked to `Customer`
     list_filter = ('created_date', 'updated_date')
     ordering = ('-created_date',)
+
+# Order Card Admin
+@admin.register(Status)
+class StatusAdmin(admin.ModelAdmin):
+    next_id = ('next_id')
