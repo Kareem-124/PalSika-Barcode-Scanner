@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search for Products</title>
     <link rel="icon" type="image/x-icon" href="{% static 'photos/icone/qr-scan.png' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <style>
     * {
@@ -23,8 +26,8 @@
     .container {
         width: 100%;
         max-width: 1200px;
-        margin: auto;
         text-align: center;
+        margin-left: 18rem;
     }
 
     h1 {
@@ -33,11 +36,15 @@
 
     .search-bar {
         margin-bottom: 20px;
+        width: 100%;
+    }
+    .search-input{
+        width: 100%;
     }
 
     .search-bar input {
         width: 100%;
-        max-width: 400px;
+        /* max-width: 400px; */
         padding: 10px;
         font-size: 16px;
         border: 1px solid #ccc;
@@ -56,10 +63,16 @@
         border: 1px solid #ddd;
     }
 
+
     .product-table th {
         background-color: #ffe32d;
         color: black;
     }
+
+#Note-th{
+    width: 30%;
+    text-align: center;
+}
 
     .product-table tr:nth-child(even) {
         background-color: #f9f9f9;
@@ -195,30 +208,43 @@
     }
     .text-align-right{
         text-align: right;
-        width: 70%;
+        width: 65%;
+    }
+    .btn-note-width{
+        width: 30%;
     }
 
     /* Responsive styles */
-    @media (max-width: 600px) {
+    @media (max-width: 900px) {
+
+        .container{
+            margin-left: 0rem;
+        }
         .product-table {
             display: none;
         }
 
         .product-cards {
             display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .card {
-            width: calc(50% - 10px); /* Two cards per row */
+            width: calc(100% - 10px); /* Two cards per row */
         }
 
         .search-bar input {
             width: 100%;
         }
-
+        .btn-group{
+            display: flex;
+            flex-direction: column;
+        }
         .btn-home {
-            width: 10rem;
-            font-size: 12px;
+            width: 100%;
+            font-size: 18px;
             padding: 10px 5px;
         }
         .price-bg{
@@ -226,17 +252,61 @@
             font-size: medium;
             font-weight: bold;
         }
+        .card h3{
+            text-align: center;
+        }
+        .card-buttons{
+            display: flex;
+            justify-content: center;
+            height: 2rem;
+        }
+        .edit-btn{
+            width: 50%;
+            justify-content: center;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            
+        }
     }
 </style>
 
 <body>
-    <div class="container">
+    <!-- Sidebar -->
+   <div id="sidebar" class="side-menu p-3 ">
+    <h5 class="menu-header text-center">Menu</h5>
+    <ul class="nav flex-column">
+        <li class="nav-item"><a href="/orders_dashboard_page" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="/inventory_page" class="nav-link">Inventory</a></li>
+        <li class="nav-item">
+            <!-- Toggle Button for Casher -->
+            <a href="#casherSubmenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                Casher
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                </svg>
+            </a>
+            <!-- Collapsible Section -->
+            <ul class="collapse nav flex-column ms-3" id="casherSubmenu">
+                <li class="nav-item w-100"><a href="/sop_page" class="nav-link">- Sell</a></li>
+                <li class="nav-item w-100"><a href="/sop_buy_page" class="nav-link"> - Buy / Return</a></li>
+            </ul>
+        </li>
+        <li class="nav-item"><a href="/" class="nav-link">Scanner</a></li>
+        <li class="nav-item"><a href="/orders_page" class="nav-link">Orders</a></li>
+        <li class="nav-item"><a href="/search_for_product_page" class="nav-link active">Products</a></li>
+    </ul>
+</div>
+
+    <div class="ml-9 container">
         <h1>Product List</h1>
+        <!--  Search Bar Section -->
         <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Search for a product..." onkeyup="filterTable()">
+            <input class="search-input" type="text" id="search-input" placeholder="Search for a product..." onkeyup="filterTable()">
         </div>
         <div class="btn-group">
             <button id="home-btn" class="btn-home">Home Page</button>
+            <button id="scanner-page-btn" class="btn-home">Scanner Page</button>
             <button id="add-product-btn" class="btn-home">Add New Product (+)</button>
         </div>
 
@@ -250,7 +320,7 @@
                     <th>Customer Price</th>
                     <th>Retail Price</th>
                     <th>Category</th>
-                    <th>Notes</th>
+                    <th id="Note-th">Notes</th>
                 </tr>
             </thead>
             <tbody>
@@ -264,7 +334,7 @@
                     <td>{{ product.category }}</td>
                     <td id="rowNote">
                         <div id="noteContainer" class="note-display">
-                            <div class="note-width text-align-right" dir="rtl">{{ product.notes | linebreaksbr }}</div>
+                            <div class="text-align-right" dir="rtl">{{ product.notes | linebreaksbr }}</div>
                             <div class="show" id="Edit{{ forloop.counter }}" data="{{ forloop.counter }}"><a href="/edit_product_page/{{ product.product_id }}/" class="btn-edit">Edit</a></div>
                         </div>
                         
@@ -287,6 +357,7 @@
                 <p><strong>Notes:</strong></p>
                 <p dir="rtl">{{ product.notes | linebreaksbr }}</p>
 
+                <hr>
                 <!-- Edit and Delete buttons -->
                 <div class="card-buttons">
                     
@@ -301,8 +372,13 @@
     <script>
         const homeButton = document.getElementById('home-btn');
         const addNewProductButton = document.getElementById('add-product-btn');
+        const scannerButton = document.getElementById('scanner-page-btn');
 
         homeButton.addEventListener('click', function() {
+            window.location.href = "/orders_dashboard_page";
+        });
+
+        scannerButton.addEventListener('click', function(){
             window.location.href = "/";
         });
 
@@ -341,7 +417,7 @@
             let selectedRow = null; // this is a flag for each row
             table.querySelectorAll('tbody tr').forEach(function(row){
                 row.addEventListener('click',function(){
-                    
+                    console.log(row.id);
                     rowID="Edit"+row.id;
                     
                     editbutton = document.getElementById(rowID);
@@ -367,37 +443,10 @@
                     }
                 })
             })
-            // const target = document.querySelectorAll();
 
 
         });
         
-        // Toggel function
-//         function Toggle(element){
-//             // if (element.children[7].style.display === "none"){
-//             //     element.children[7].style.display  = "block";
-//             // }
-//             // else{
-//             //     element.children[7].style.display === "none"
-//             // }
-
-// //             document.getElementById("MyElement").classList.add('MyClass');
-
-// // document.getElementById("MyElement").classList.remove('MyClass');
-
-// // if ( document.getElementById("MyElement").classList.contains('MyClass') )
-
-// // document.getElementById("MyElement").classList.toggle('MyClass');
-//             let id = "Edit"+element.children[7].attributes.data.value;
-            
-//     target = document.getElementById(id);  
-//     if (target.classList.contains('hide')){
-
-//     }    
-    // console.log("Edit"+(element.children[7].attributes.data.value));
-
-
-        // }
     </script>
 </body>
 </html>

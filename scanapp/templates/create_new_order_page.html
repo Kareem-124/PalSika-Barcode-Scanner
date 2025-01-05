@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Order</title>
+    <style>
+        /* CSS styles */
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Form Container */
+.form-container {
+    max-width: 60rem;
+    margin: 2rem auto;
+    padding: 20px 40px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.form-container h1 {
+    text-align: center;
+    color: #ffba00; /* Yellow theme color */
+    margin-bottom: 30px;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #333;
+    margin-top: 5px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #ffba00;
+    box-shadow: 0px 0px 5px rgba(255, 186, 0, 0.5);
+}
+
+/* Suggestions Box */
+.suggestions-box {
+    position: absolute;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.suggestions-box div {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.suggestions-box div:hover {
+    background-color: #ffba00;
+    color: #fff;
+}
+
+/* Add Product Button */
+.add-product-btn {
+    background-color: #ffba00; /* Yellow theme color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.add-product-btn:hover {
+    background-color: #e0a800;
+}
+
+/* Table */
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+thead {
+    background-color: #ffba00; /* Yellow theme color */
+    color: white;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Submit and Cancel Buttons */
+.submit-btn,
+.cancel-btn {
+    display: inline-block;
+    width: 48%;
+    text-align: center;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-btn {
+    background-color: #ffba00;
+    color: white;
+}
+
+.submit-btn:hover {
+    background-color: #e0a800;
+}
+
+.cancel-btn {
+    background-color: #ddd;
+    color: #333;
+    text-decoration: none;
+}
+
+.cancel-btn:hover {
+    background-color: #bbb;
+    text-decoration: none;
+}
+
+/* Modal Overlay */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+    width: 90%;
+    max-width: 40rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.modal-content h2 {
+    color: #ffba00;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modal-content label {
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.modal-content input,
+.modal-content select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+    outline: none;
+    border-color: #ffba00;
+    box-shadow: 0px 0px 5px rgba(255, 186, 0, 0.5);
+}
+
+/* Save Product Button */
+.save-product-btn {
+    background-color: #ffba00;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.save-product-btn:hover {
+    background-color: #e0a800;
+}
+
+/* Close Button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #ff0000;
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Create New Order</h1>
+        <form method="POST" action="{% url 'create_new_order_process' %}">
+            {% csrf_token %}
+    
+            <div class="form-group">
+                <label for="customer_name">Customer Name</label>
+                <input type="text" id="customer_name" name="customer_name" oninput="filterCustomers()" onkeydown="navigateSuggestions(event)" autocomplete="off" required>
+                <div id="customerSuggestions" class="suggestions-box"></div>
+            </div>
+    
+            <div id="available_customers_names" hidden>{{ customer_names }}</div>
+            
+
+            <div class="form-group">
+                <label for="order_type">Order Type</label>
+                <select id="order_type" name="order_type" required>
+                    <option value="sell" selected>Sell</option>
+                    <option value="buy">Buy</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="delivery_date">Delivery Date</label>
+                <input type="date" id="delivery_date" name="delivery_date">
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status" required>
+                    <option value="pending">Pending</option>
+                    <option value="on_hold">On Hold</option>
+                    <option value="completed">Completed</option>
+                    <option value="work_in_progress">Work In Progress</option>
+                    <option value="canceled">Canceled</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Add Products</label>
+                <button type="button" class="add-product-btn" onclick="openModal()">&#43; Add Product</button>
+            </div>
+
+            <div class="table-container">
+                <table id="productTable">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Products will be added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Order</button>
+            <a href="/" class="cancel-btn">Cancel</a>
+        </form>
+    </div>
+
+    <!-- Modal Window -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>Add Product</h2>
+            <label for="modalProductSelect">Product Name</label>
+            <div style="position: relative;">
+                <!-- Search for product -->
+                <input type="text" id="productSearchInput" placeholder="Search Product..." oninput="filterProducts()"> 
+                <select id="modalProductSelect" required size="5" style="width: 100%; margin-top: 5px;">
+                    {% for product in products %}
+
+                    <option id="{{ product.product_id }}" class="" value="{{ product.product_id }}">{{ product.name }}</option>
+                    {% endfor %}
+                </div>
+                </select>
+            </div>
+
+            <label for="modalQuantity">Quantity</label>
+            <input type="number" id="modalQuantity" min="1" required>
+
+            <label for="modalUnitPrice">Unit Price</label>
+            <input type="number" id="modalUnitPrice" step="0.01" required>
+
+            <button type="button" class="save-product-btn" onclick="addProduct()">Add Product</button>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        let count = 0;
+function filterProducts() {
+            const input = document.getElementById('productSearchInput').value.toLowerCase();
+            const options = document.getElementById('modalProductSelect').options;
+
+            for (let i = 0; i < options.length; i++) {
+                const option = options[i];
+                const text = option.textContent.toLowerCase();
+                option.style.display = text.includes(input) ? 'block' : 'none';
+            }
+        }
+
+        function openModal() {
+            document.getElementById("productModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("productModal").style.display = "none";
+        }
+
+        function addProduct() {
+            const productId = document.getElementById('modalProductSelect').value;
+            console.log(productId);
+            console.log(count);
+            count++;
+            const productName = document.getElementById('modalProductSelect').selectedOptions[0].text;
+            const quantity = document.getElementById('modalQuantity').value;
+            const unitPrice = document.getElementById('modalUnitPrice').value;
+            const total = (quantity * unitPrice).toFixed(2);
+
+            const tbody = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+            const row = tbody.insertRow();
+
+            row.innerHTML = `
+                <td>${productName}</td>
+                <td>${quantity}</td>
+                <td>${unitPrice}</td>
+                <td>${total}</td>
+                <td><button type="button" onclick="removeProduct(this)">Remove</button></td>
+                <input type="hidden" data-count="${count}" name="product_${count}" value="${productId}">
+                <input type="hidden" name="product_qty_${count}" value="${quantity}">
+                <input type="hidden" name="product_price_${count}" value="${unitPrice}">
+            `;
+
+            closeModal();
+        }
+
+        function removeProduct(button) {
+            const row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        // Customers 
+//         function filterCustomers() {
+//     const input = document.getElementById('customer_name').value.toLowerCase();
+//     const suggestionsBox = document.getElementById('customerSuggestions');
+//     const available_customers_names = document.getElementById('available_customers_names').innerHTML;
+//     console.log(available_customers_names);
+//     let formattedString = available_customers_names.replace(/'/g, '"');
+
+//     // Step 2: Parse the formatted string into an array
+//     let customers = JSON.parse(formattedString);
+
+//     console.log(customers);
+//     const maxSuggestions = 5;
+
+//     suggestionsBox.innerHTML = '';  // Clear previous suggestions
+//     let count = 0;
+//         customers.forEach(customer => {
+//             const customerName = customer.toLowerCase();
+//             if (customerName.includes(input) && count < maxSuggestions) {
+//                 const suggestionItem = document.createElement('div');
+//                 suggestionItem.classList.add('suggestion-item');
+//                 suggestionItem.textContent = customer;
+
+//                 // Click event to select customer
+//                 suggestionItem.onclick = function () {
+//                     document.getElementById('customer_name').value = customer;
+//                     suggestionsBox.innerHTML = ''; // Clear suggestions after selection
+//                 };
+
+//                 suggestionsBox.appendChild(suggestionItem);
+//                 count++;
+//             }
+//         });
+
+// }
+
+let currentSuggestionIndex = -1;
+
+function filterCustomers() {
+    const input = document.getElementById('customer_name').value.toLowerCase();
+    const suggestionsBox = document.getElementById('customerSuggestions');
+
+    let available_customers_names = document.getElementById('available_customers_names').textContent;
+    let formattedString = available_customers_names.replace(/'/g, '"');
+    let customers = JSON.parse(formattedString);
+
+    suggestionsBox.innerHTML = '';
+
+    if (input.trim() === '') {
+        suggestionsBox.style.display = 'none';
+        return;
+    }
+
+    const matches = customers.filter(name => name.toLowerCase().includes(input)).slice(0, 5);
+
+    if (matches.length > 0) {
+        matches.forEach((name, index) => {
+            const suggestionItem = document.createElement('div');
+            suggestionItem.classList.add('suggestion-item');
+            suggestionItem.textContent = name;
+
+            if (index === currentSuggestionIndex) {
+                suggestionItem.classList.add('active');
+            }
+
+            suggestionItem.onclick = () => selectSuggestion(name);
+            suggestionsBox.appendChild(suggestionItem);
+        });
+        currentSuggestionIndex = -1;
+        suggestionsBox.style.display = 'block';
+    } else {
+        suggestionsBox.style.display = 'none';
+    }
+}
+
+
+function navigateSuggestions(event) {
+    const suggestionsBox = document.getElementById('customerSuggestions');
+    const suggestions = suggestionsBox.getElementsByClassName('suggestion-item');
+
+    if (suggestions.length === 0) return;
+
+    if (event.key === 'ArrowDown' || (event.key === 'Tab' && !event.shiftKey)) {
+        event.preventDefault();
+        currentSuggestionIndex = (currentSuggestionIndex + 1) % suggestions.length;
+        updateActiveSuggestion(suggestions);
+    } else if (event.key === 'ArrowUp' || (event.key === 'Tab' && event.shiftKey)) {
+        event.preventDefault();
+        currentSuggestionIndex = (currentSuggestionIndex - 1 + suggestions.length) % suggestions.length;
+        updateActiveSuggestion(suggestions);
+    } else if (event.key === 'Enter') {
+        event.preventDefault();
+        if (currentSuggestionIndex >= 0 && currentSuggestionIndex < suggestions.length) {
+            selectSuggestion(suggestions[currentSuggestionIndex].textContent);
+        }
+    }
+}
+
+function updateActiveSuggestion(suggestions) {
+    for (let i = 0; i < suggestions.length; i++) {
+        suggestions[i].classList.toggle('active', i === currentSuggestionIndex);
+    }
+}
+
+function highlightSuggestion(suggestions) {
+    for (let i = 0; i < suggestions.length; i++) {
+        suggestions[i].classList.remove('active');
+    }
+    if (currentSuggestionIndex >= 0) {
+        suggestions[currentSuggestionIndex].classList.add('active');
+    }
+}
+
+function selectSuggestion(name) {
+    document.getElementById('customer_name').value = name;
+    document.getElementById('customerSuggestions').style.display = 'none';
+    currentSuggestionIndex = -1;
+}
+
+document.addEventListener('click', function(event) {
+    const suggestionsBox = document.getElementById('customerSuggestions');
+    if (!suggestionsBox.contains(event.target) && event.target !== document.getElementById('customer_name')) {
+        suggestionsBox.style.display = 'none';
+    }
+});
+
+    </script>
+</body>
+</html>
