@@ -16,6 +16,7 @@ from django.core.serializers import serialize
 from django.forms.models import model_to_dict  # Use for more control
 from django.core.exceptions import ObjectDoesNotExist
 
+
 def index(request):
     return render(request, 'index.html')
 
@@ -67,9 +68,23 @@ def add_product(request):
             category = category,
             notes=notes,
         )
-        nextID = Status.objects.get(id=1)
-        nextID.next_id += 1
-        nextID.save()
+        # Recommend next number process for manual entry
+        if ((int(product_id)/100000) < 1):
+            nextID = Status.objects.get(id=1)
+            step = nextID.next_id
+            # Check if the next product_id is available
+            while(True):
+                nextProduct = Product.objects.filter(product_id = step).exists()
+                # if the products exists add +1
+                if nextProduct:
+                    step +=1
+                # else use the available id
+                else:
+                    nextID.next_id = step
+                    nextID.save()
+                    break
+            
+        
 
         return redirect('/search_for_product_page')
 
