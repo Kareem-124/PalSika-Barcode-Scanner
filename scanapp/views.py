@@ -16,6 +16,7 @@ from django.core.serializers import serialize
 from django.forms.models import model_to_dict  # Use for more control
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
+from django.template.loader import render_to_string
 
 
 def index(request):
@@ -355,11 +356,19 @@ def create_new_order_process(request):
 
 # Pager: orders_page displays all opened order cards 
 def orders_page(request):
-    # This will get the cards and arrange them first according to the delivery date and any one with the same Delivery date
-    # will be arranged to their IDs (higher ID: newest)
-    # to access objects within OrderCard use '__' then the name of the column
-    orders_cards = OrderCard.objects.select_related('order', 'delivery', 'order__customer') \
-        .order_by('-order__delivery_date', '-id')
+    search_query = request.GET.get('search', '')
+    
+    if search_query:
+        print(f"Search query: {search_query}")
+        orders_cards = OrderCard.objects.select_related('order', 'delivery', 'order__customer') \
+            .filter(order__customer__name__icontains=search_query) \
+            .order_by('-order__delivery_date', '-id')
+    else:
+        print("No search query")
+        orders_cards = OrderCard.objects.select_related('order', 'delivery', 'order__customer') \
+            .order_by('-order__delivery_date', '-id')
+        print(orders_cards)
+    
     delivery = Delivery.objects.all()
     customers = Customer.objects.all()
 
@@ -367,13 +376,20 @@ def orders_page(request):
     paginator = Paginator(orders_cards, 20)  # Show 20 order cards per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    print(f"Page number: {page_number}")
 
     context = {
-        'orders_cards': orders_cards,
-        'page_obj': page_obj,
+        'page_obj': page_obj,  # Use paginated orders_cards
         'delivery': delivery,
         'customers': customers,
     }
+#   I want to add a code that checks if the request is an ajax request or not
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            print("This is an AJAX request")
+            html = render_to_string('partials/order_cards.html', context, request=request)
+            return JsonResponse({'data': html})
+    print("This is not an AJAX request")
+    print(context)
     return render(request, 'orders_page.html', context)
 
 # This section is responsible for providing the products for each card in orders_page it uses Ajax for this operation.
@@ -392,7 +408,7 @@ def order_page_products_request(request, orderID):
             'total_price': str(item.total_items_price),  # Convert Decimal to string for JSON serialization
         }
         test.append(product_info)
-    table_id = "table_" + orderID
+    table_id = "table_" + str(orderID)
     data = {
         'products' : test,
         'table_id' : table_id,
