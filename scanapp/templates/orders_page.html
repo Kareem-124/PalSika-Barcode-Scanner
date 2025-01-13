@@ -113,132 +113,143 @@
             </li>
         </ul>
         <div class="orders-list mt-4">
-
-            {% for card in orders_cards %}
+            {% for card in page_obj %}
             <div class="order-card mt-4 d-flex" data-status="{{ card.order.status }}" data-id="{{ card.order.id }}" data-customer="{{ card.order.customer.name | lower }}">
-                
-                {% if card.order.status == "pending"%}
-                <div class="vl-2-pending"></div>
-                {% elif card.order.status == "work_in_progress" %}
-                <div class="vl-2-wip"></div>
-                {% elif card.order.status == "on_hold" %}
-                <div class="vl-2-on-hold"></div>
-                {% elif card.order.status == "canceled" %}
-                <div class="vl-2-canceled"></div>
-                {% elif card.order.status == "completed" %}
-                <div class="vl-2-completed"></div>
-                {% endif %}
-                <div class="flex-fill">
+            
+            {% if card.order.status == "pending"%}
+            <div class="vl-2-pending"></div>
+            {% elif card.order.status == "work_in_progress" %}
+            <div class="vl-2-wip"></div>
+            {% elif card.order.status == "on_hold" %}
+            <div class="vl-2-on-hold"></div>
+            {% elif card.order.status == "canceled" %}
+            <div class="vl-2-canceled"></div>
+            {% elif card.order.status == "completed" %}
+            <div class="vl-2-completed"></div>
+            {% endif %}
+            <div class="flex-fill">
+                <div class="order-header d-flex">
+                <div class="order-header">
+                    <h2 class="mb-1 yellow">Order ID:<span class="text-dark"> {{ card.order.id }}</span>
+                    <!-- Edit card_Order -->
+                    <button class="btn" title="Edit Order" data-id="{{ card.order.id }}"><a href="../edit_order_card_page/{{ card.id }}" class="edit-card-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" data-id="{{ card.order.id }}">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                        </svg></a>
+                    </button>  
+                    </h2>
 
-
-                
-                    <div class="order-header d-flex">
-                        <div class="order-header">
-                            <h2 class="mb-1 yellow">Order ID:<span class="text-dark"> {{ card.order.id }}</span>
-                                <!-- Edit card_Order -->
-                                <button class="btn" title="Edit Order" data-id="{{ card.order.id }}"><a href="../edit_order_card_page/{{ card.id }}" class="edit-card-link">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" data-id="{{ card.order.id }}">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                                    </svg></a>
-                                </button>  
-                            </h2>
-
-                            <p>Status:<span class="fw-bold"> {{ card.order.status }}</span></p>
-                            <p>Customer:<span class="fw-bold" id="customer-name-{{ card.id}}"> {{ card.order.customer.name }}</span> 
-                                <button class="btn" title="Edit Customer" data-id="{{ card.order.customer.id }}"><a href="../edit_customer_page/{{ card.order.customer.id }}" class="edit-card-link">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" data-id="{{ card.order.customer.id }}">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                                    </svg></a>
-                                </button>
-                                <button class="btn" title = "Change Customer" onclick="openCustomerModal('{{ card.id }}')">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-credit-card-2-front-fill" viewBox="0 0 16 16">
-                                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
-                                    </svg>
-                                </button>
-                            </p>
-                            <p>Phone:<span class="fw-bold"> {{ card.order.customer.phone_number }}</span></p>
-                            <p>Action:<span class="fw-bold fs-3"> {{ card.order.order_type }}</span></p>
-                            <p>Delivery Date:<span class="fw-bold"> {{ card.order.delivery_date }}</span></p>
-                        </div>
-                        <div class="vl"></div>
-                            <!-- Driver Name Section -->
-                        <div class="order-header" id="driver-info-{{ card.id }}">
-                            <h2 class="mb-1 yellow">Delivery Name: <span class="text-dark"> {{ card.delivery.driver_name }}</span>
-                            <button class="btn" title = "Change Driver" onclick="openModal('{{ card.id }}')">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-credit-card-2-front-fill" viewBox="0 0 16 16">
-                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
-                                </svg>
-                            </button>
-                            <button class="btn" title="Edit Driver" data-id="{{ card.order.customer.id }}"><a href="../edit_driver_page/{{ card.delivery.id }}" class="edit-card-link">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" data-id="{{ card.order.customer.id }}">
-                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                                </svg></a>
-                            </button>
-
-                            </h2>
-                            <p>Line:<span class="fw-bold"> {{ card.delivery.driver_city_line }}</span></p>
-                            <p>Phone:<span class="fw-bold"> {{ card.delivery.driver_phone }}</span></p>
-                        </div>
-
-                    
-                    </div>
-                
-                    <hr>
-                    <!-- <div class="order-body">
-                        <p>Customer: {{ card.order.customer.name }}</p>
-                        <p>Delivery Date: {{ card.order.delivery_date }}</p>
-                    </div> -->
-                    
-                    <div class="order-footer">
-                        <button class="details-btn yellow-bg-btn fw-bold"
-                        id="{{ forloop.counter }}" 
-                        data-orderID="{{ card.order.id }}" 
-                        onload="get_ordered_products(this)"
-                        onclick="get_ordered_products(this)"
-                        
-                        data-bs-toggle="collapse" 
-                        data-bs-target="#collapseExample{{ card.order.id }}" 
-                        aria-expanded="false" 
-                        aria-controls="collapseExample">View Details</button>
-                        
-                    </div>
-                    <div class="collapse mt-3" id="collapseExample{{ card.order.id }}">
-                        <table class="product-table">
-                            <thead>
-                                <tr class="table-header">
-                                    <th>#</th>
-                                    <th>Product Name</th>
-                                    <th>Quantity</th>
-                                    <th>Price/Unit</th>
-                                    <th>Discount</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table_{{ card.order.id }}">
-                                <tr>
-                                    <td>1</td>
-                                    <td>Example Product</td>
-                                    <td>3</td>
-                                    <td>$10.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <hr>
-                        <div>
-                            <h3>Total Discount: {{ card.total_discount}} </h3>
-                        </div>
-                        <div>
-                            <h3>Total Net Price: <span class="fw-bold">{{ card.net_price }}</span></h3>
-                        </div>
-                    </div>
+                    <p>Status:<span class="fw-bold"> {{ card.order.status }}</span></p>
+                    <p>Customer:<span class="fw-bold" id="customer-name-{{ card.id}}"> {{ card.order.customer.name }}</span> 
+                    <button class="btn" title="Edit Customer" data-id="{{ card.order.customer.id }}"><a href="../edit_customer_page/{{ card.order.customer.id }}" class="edit-card-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" data-id="{{ card.order.customer.id }}"></svg>
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                        </svg></a>
+                    </button>
+                    <button class="btn" title = "Change Customer" onclick="openCustomerModal('{{ card.id }}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-credit-card-2-front-fill" viewBox="0 0 16 16"></svg>
+                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
+                        </svg>
+                    </button>
+                    </p>
+                    <p>Phone:<span class="fw-bold"> {{ card.order.customer.phone_number }}</span></p>
+                    <p>Action:<span class="fw-bold fs-3"> {{ card.order.order_type }}</span></p>
+                    <p>Delivery Date:<span class="fw-bold"> {{ card.order.delivery_date }}</span></p>
                 </div>
+                <div class="vl"></div>
+                    <!-- Driver Name Section -->
+                <div class="order-header" id="driver-info-{{ card.id }}">
+                    <h2 class="mb-1 yellow">Delivery Name: <span class="text-dark"> {{ card.delivery.driver_name }}</span>
+                    <button class="btn" title = "Change Driver" onclick="openModal('{{ card.id }}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-credit-card-2-front-fill" viewBox="0 0 16 16">
+                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
+                    </svg>
+                    </button>
+                    <button class="btn" title="Edit Driver" data-id="{{ card.order.customer.id }}"><a href="../edit_driver_page/{{ card.delivery.id }}" class="edit-card-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" data-id="{{ card.order.customer.id }}"></svg>
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                    </svg></a>
+                    </button>
+
+                    </h2>
+                    <p>Line:<span class="fw-bold"> {{ card.delivery.driver_city_line }}</span></p>
+                    <p>Phone:<span class="fw-bold"> {{ card.delivery.driver_phone }}</span></p>
+                </div>
+                </div>
+                <hr>
+                <div class="order-footer">
+                <button class="details-btn yellow-bg-btn fw-bold"
+                id="{{ forloop.counter }}" 
+                data-orderID="{{ card.order.id }}" 
+                onload="get_ordered_products(this)"
+                onclick="get_ordered_products(this)"
+                data-bs-toggle="collapse" 
+                data-bs-target="#collapseExample{{ card.order.id }}" 
+                aria-expanded="false" 
+                aria-controls="collapseExample">View Details</button>
+                </div>
+                <div class="collapse mt-3" id="collapseExample{{ card.order.id }}">
+                <table class="product-table">
+                    <thead>
+                    <tr class="table-header">
+                        <th>#</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price/Unit</th>
+                        <th>Discount</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table_{{ card.order.id }}">
+                    <tr>
+                        <td>1</td>
+                        <td>Example Product</td>
+                        <td>3</td>
+                        <td>$10.00</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <div>
+                    <h3>Total Discount: {{ card.total_discount}} </h3>
+                </div>
+                <div>
+                    <h3>Total Net Price: <span class="fw-bold">{{ card.net_price }}</span></h3>
+                </div>
+                </div>
+            </div>
             </div>
             {% endfor %}
         </div>
-    </div>
+        <!-- Pagination Controls -->
+        <div class="pagination-controls mt-4">
+            <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                </li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                </li>
+                {% endif %}
+            </ul>
+            </nav>
+        </div>
 
 <!-- Driver Modal Window -->
 <div id="modal-card-id" hidden></div>
@@ -333,7 +344,7 @@ function searchOrders() {
 }
 
 function get_ordered_products(element) {
-    console.log("onload funcion!")
+    console.log("onload function!")
     const orderId = element.getAttribute('data-orderID');
     const url = `../order_page_products_request/${orderId}`;
 

@@ -15,6 +15,7 @@ from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.forms.models import model_to_dict  # Use for more control
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
 
 
 def index(request):
@@ -354,13 +355,22 @@ def create_new_order_process(request):
 
 # Pager: orders_page displays all opened order cards 
 def orders_page(request):
-    orders_cards = OrderCard.objects.select_related('order', 'delivery', 'order__customer').order_by('-created_date', '-id')
-
+    # This will get the cards and arrange them first according to the delivery date and any one with the same Delivery date
+    # will be arranged to their IDs (higher ID: newest)
+    # to access objects within OrderCard use '__' then the name of the column
+    orders_cards = OrderCard.objects.select_related('order', 'delivery', 'order__customer') \
+        .order_by('-order__delivery_date', '-id')
     delivery = Delivery.objects.all()
     customers = Customer.objects.all()
-    
+
+    # Pagination
+    paginator = Paginator(orders_cards, 20)  # Show 20 order cards per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'orders_cards': orders_cards,
+        'page_obj': page_obj,
         'delivery': delivery,
         'customers': customers,
     }
@@ -706,10 +716,13 @@ def SOP_process(request):
 def sop_page(request):
     customer_names = Customer.objects.values_list('name', flat=True).distinct()
     products = Product.objects.all()
+    # Get the time
+    today = datetime.now().strftime("%Y-%m-%d")
     
     context = {
         'customers_names' : list(customer_names),
         'products' : products,
+        'todaysDate' : today,
     }
     return render(request, 'sop_page.html', context)
 
@@ -728,6 +741,7 @@ def sop_sell_request(request):
         count = 1
         products_list = []
         customerName = request.POST.get('customerName')
+        sellingDate = request.POST.get('sellingDate')
         # if the user didn't enter a customer name use N/A as default
         if not customerName:
             customerName = "N/A"
@@ -737,13 +751,13 @@ def sop_sell_request(request):
         #----------------------------- CREATE NEW ORDER ----------------------------------------
 # Customer Name : customer
 # Order Type : "Sell"
-# Delivery Date : Now
+# Delivery Date : "sellingDate"
 # Status : "completed"
         # Create the Order with the Customer foreign key
         order = Order.objects.create(
             customer=customer,
             order_type="Sell",
-            delivery_date=timezone.now(),
+            delivery_date=sellingDate,
             order_date=timezone.now(),
             status="completed"
         )
@@ -821,13 +835,14 @@ def sop_sell_request(request):
         # order = Order.objects.get(id=order_id)
         delivery = Delivery.objects.get(id=delivery_id) if delivery_id else None
 
+        # Check if there is a total discount or not
         try:
             totalDisc = request.POST.get("totalDisc") # get the total discount
             print(f"Try is okay, and total Discount = {totalDisc}")
         except:
             totalDisc = 0
-            print("I am at the expect")
-        
+            
+        # check if there is a total price or not
         try:
             totalPrice = request.POST.get("totalPrice") # get the total price
         except:
@@ -852,10 +867,14 @@ def sop_sell_request(request):
 def sop_buy_page(request):
     customer_names = Customer.objects.values_list('name', flat=True).distinct()
     products = Product.objects.all()
+
+        # Get the time
+    today = datetime.now().strftime("%Y-%m-%d")
     
     context = {
         'customers_names' : list(customer_names),
         'products' : products,
+        'todaysDate': today,
     }
     return render(request, 'sop_buy_page.html', context)
 
@@ -865,6 +884,7 @@ def sop_buy_request(request):
         count = 1
         products_list = []
         customerName = request.POST.get('customerName')
+        buyingDate = request.POST.get('buyingDate')
         # if the user didn't enter a customer name use N/A as default
         if not customerName:
             customerName = "N/A"
@@ -880,7 +900,7 @@ def sop_buy_request(request):
         order = Order.objects.create(
             customer=customer,
             order_type="Buy",
-            delivery_date=timezone.now(),
+            delivery_date=buyingDate,
             order_date=timezone.now(),
             status="completed"
         )
@@ -1039,6 +1059,29 @@ def edit_inventory_request(request):
     except Exception as e:
         return JsonResponse({'error': f'An unexpected error occurred: {str(e)}'}, status=500)
 
+
+def sop_edit_page(request,cardID):
+    customer_names = Customer.objects.values_list('name', flat=True).distinct()
+    products = Product.objects.all()
+    card = OrderCard.objects.get(id = cardID)
+    orderID = card.order.id
+    orderItem = OrderItem.objects.filter(order_id=orderID)
+    
+    print(f"Order Items: {orderItem}")
+    # Get the time
+    today = datetime.now().strftime("%Y-%m-%d")
+    
+    context = {
+        'customers_names' : list(customer_names),
+        'products' : products,
+        'todaysDate' : today,
+        'card': card,
+        'orderItem': orderItem,
+    }
+    return render(request, 'sop_edit_page.html', context)
+
+def sop_edit_sell_request(request):
+    return redirect('sop_page')
 # def sold_products_page(request):
 #     products = Product.objects.all()
 #     today = datetime.now().strftime("%Y-%m-%d")

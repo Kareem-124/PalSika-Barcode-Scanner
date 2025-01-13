@@ -104,7 +104,7 @@ class OrderCard(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"OrderCard for {self.order}"
+        return f"OrderCard for {self.order} / card ID: {self.id}"
 
 
     

@@ -38,6 +38,9 @@ urlpatterns = [
     path('inventory_page/', views.inventory_page, name='inventory_page'),
     path('reset_all_inv_qty/', views.reset_all_inv_qty, name='reset_all_inv_qty'),
     path('edit_inventory_request/', views.edit_inventory_request, name='edit_inventory_request'),
+    path('sop_edit_page/<int:cardID>', views.sop_edit_page, name='sop_edit_page'),
+    path('sop_page_request_product_data/', views.sop_page_request_product_data, name='sop_page_request_product_data'),
+    path('sop_edit_sell_request/', views.sop_edit_sell_request, name='sop_edit_sell_request'),
     # path('sold_products_page/', views.sold_products_page, name='sold_products_page'),
 
 

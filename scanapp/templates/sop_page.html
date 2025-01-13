@@ -112,6 +112,92 @@
     background-color: #cc0000; /* Darker red on hover */
 }
 
+/* Buttons CSS*/
+
+/* Container Styles */
+.container-btn-date {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+}
+
+/* Add Product Button */
+.btn-add-product {
+    background-color: #007bff; /* Yellow theme color */
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease-in-out;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    height: 3rem;
+}
+
+.btn-add-product:hover {
+    background-color: #0056b3; /* Darker yellow on hover */
+}
+
+/* Date Container Styles */
+.date-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    margin-left: 5rem;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.date-container label {
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: bold;
+    width: 17rem;
+    text-align: center;
+}
+
+.date-container input[type="date"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #333;
+    background-color: #fff;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 250px;
+}
+
+.date-container input[type="date"]:focus {
+    border-color: #ffba00; /* Yellow theme color */
+    box-shadow: 0px 0px 5px rgba(255, 186, 0, 0.5);
+    outline: none;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .container-btn-date {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+    }
+
+    .btn-add-product {
+        width: 100%;
+    }
+
+    .date-container input[type="date"] {
+        width: 100%;
+    }
+}
 
     </style>
 </head>
@@ -170,7 +256,14 @@
         
 
         <!-- Add Product Button -->
-        <button type="button" id="add-product" class="btn-add-product" data-bs-toggle="modal" data-bs-target="#addProductModal" >+ Add Product</button>
+        <div class="container-btn-date">
+            <button type="button" id="add-product" class="btn-add-product" data-bs-toggle="modal" data-bs-target="#addProductModal" >+ Add Product</button>
+            <div class="date-container">
+                <!-- Select Date Input -->
+                <label for="date">Select Selling Date:</label>
+                <input id="date" type="date" name="sellingDate" value="{{ todaysDate }}">
+            </div>
+        </div>
 
         <!-- Product Table -->
         <table class="table table-bordered" name = "productsTable">

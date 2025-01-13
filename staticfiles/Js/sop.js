@@ -1,11 +1,4 @@
 var rowCount = 0;
-document.addEventListener('DOMContentLoaded', (event) => {
-    console.log('DOM fully loaded and parsed');
-
-});
-function test1() {
-    console.log('The file is connected correctly');
-}
 const csrf = document.getElementsByName("csrfmiddlewaretoken");
 // Add new product row
 function addProduct() {

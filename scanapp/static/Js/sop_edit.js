@@ -1,11 +1,5 @@
 var rowCount = 0;
-document.addEventListener('DOMContentLoaded', (event) => {
-    console.log('DOM fully loaded and parsed');
 
-});
-function test1() {
-    console.log('The file is connected correctly');
-}
 const csrf = document.getElementsByName("csrfmiddlewaretoken");
 // Add new product row
 function addProduct() {
@@ -117,55 +111,48 @@ function reCalculate(e){
     // console.log(e.cells[4].firstChild.value); // Discount values
 
     let qty = e.cells[2].firstChild.value;
+    console.log(`QTY = ${qty}`);
     let price = e.cells[3].firstChild.value;
+    console.log(`Price = ${price}`);
     let disc = e.cells[4].firstChild.value;
+    console.log(`Discount = ${disc}`);
+
 
     total = (qty*price) - disc;
-    // console.log(`the total price = ${total}`);
-    e.setAttribute("value",total);
-    e.cells[5].innerText = total;
+    console.log(`the total price = ${total}`);
+    e.cells[5].setAttribute("value",total); // set the value attribute of the cell to the 'total' value
+    e.cells[5].innerText = total; // set the inner text of the cell to the 'total' value
     totalValue();
 }
 
-function totalValue(){
+function totalValue() {
     let total = 0;
     let totalDisc = 0;
     let rows = document.getElementById("product-table-body");
-    // console.log(rows.children.length);
     let rowsLength = rows.children.length;
 
-    for (let i = 0; i < rowsLength; i++){
-        // console.log(rows.children[i]);
+    for (let i = 0; i < rowsLength; i++) {
         let totalElement = rows.children[i];
-        let totalDiscElement = rows.children[i].cells[4].firstChild.value;
-        // console.log(element);
-        // console.log(element.getAttribute("value"));
-        // Total Price
-        price = parseInt(totalElement.getAttribute("value"));
-        // console.log(`price = ${price}`);
+        totalElement = rows.children[i].cells[5]; // Get the total price cell
+        let totalDiscElement = rows.children[i].cells[4].firstChild.value; // Get the discount cell value
+        // console.log("TotalDisc Element value :"+totalDiscElement);
+        // console.log(totalElement);
+        // console.log(totalElement.getAttribute("value"));
+        let price = parseInt(totalElement.getAttribute("value")); // Get the total price value (This step might be unnecessary as the value is already set in the cell as an integer)
         total = total + price;
 
-        // total Discount
-        // console.log(totalDiscElement);
         let disc = parseInt(totalDiscElement);
-        // console.log(disc);
         totalDisc = totalDisc + disc;
-
     }
     let totalDiscount = document.getElementById("total-discount");
-    let discountInputElement = document.getElementById("total-discount-input")
-    let totalPriceInputElement = document.getElementById("total-price-input")
-    let totalPrice = document.getElementById("total-price");
-
+    let discountInputElement = document.getElementById("total-discount-input");
+    // Update the total discount and total price elements
     totalDiscount.innerText = totalDisc;
-    totalPrice.innerText = total;
-
     discountInputElement.value = totalDisc;
-    totalPriceInputElement.value = total;
-    // console.log(`Discount = ${totalDisc}`);
-
-    // console.log(`total = ${total}`);
-    return
+    let totalOfAllProductsElement = document.getElementById("total-price");
+    totalOfAllProductsElement.innerText = total;
+    totalOfAllProductsElement.value = total;
+    // console.log("the total =" +total);
 }
 
 function removeRow(button) {
@@ -174,5 +161,8 @@ function removeRow(button) {
     totalValue();
 }
 
+document.addEventListener('DOMContentLoaded', (event) => {
+    totalValue();
+});
 
 
