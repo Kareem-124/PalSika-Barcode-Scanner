@@ -46,7 +46,7 @@
             font-size: 1.2rem;
         }
 
-        #sell-button {
+        /* #sell-button {
             margin-top: 20px;
             background-color: #ffe32d;
             color: black;
@@ -61,7 +61,7 @@
 
         #sell-button:hover {
             background-color: #efae0b;
-        }
+        } */
 
         .btn-add-product {
             background-color: #007bff;
@@ -180,7 +180,21 @@
     box-shadow: 0px 0px 5px rgba(255, 186, 0, 0.5);
     outline: none;
 }
-
+.btn-primary{
+    background-color: #007bff !important;
+    color: white !important;
+    font-weight: bold;
+    border: none;
+    padding: 8px 16px;
+    font-size: 1.25rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+.btn-primary:hover {
+    background-color: #0056b3 !important;
+}
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
     .container-btn-date {
@@ -291,7 +305,7 @@
         </div>
 
         <!-- Sell Button -->
-        <button id="sell-button" type="submit">Submit</button>
+        <button id="sell-button" type="submit" class="btn-primary">BUY</button>
     
     </div>
 </form>

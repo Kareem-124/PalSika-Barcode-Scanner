@@ -53,13 +53,14 @@
             return false;
     }">
         <div class="dropdown-container position-relative">
+            <input type="hidden" name="cardID" value="{{ card.id }}">
 
                 {% csrf_token %}
 
             
             <label for="customerSearch" class="form-label">Search Customer:</label>
             <div class="input-group">
-                <input  type="text" name="customerName" id="customerSearch" class="form-control" placeholder="Start typing to search..." onkeyup="searchCustomers()" autocomplete="off">
+                <input  type="text" name="customerName" id="customerSearch" class="form-control" placeholder="Start typing to search..." onkeyup="searchCustomers()" autocomplete="off" value="{{ card.order.customer.name }}">
                 <button class="btn btn-light" type="button">
                     <i class="bi bi-list"></i> <!-- Bootstrap Icon -->
                 </button>
@@ -81,7 +82,7 @@
         </div>
 
         <!-- Product Table -->
-        <table class="table table-bordered" name = "productsTable">
+        <table class="table table-bordered" name = "productsTable" id="products-table">
             <thead class="table-light">
                 <tr>
                     <th>#</th>
@@ -95,9 +96,10 @@
             <tbody id="product-table-body">
                 <!-- Rows will be dynamically added here -->
                 {% for product in orderItem %}
-                <tr onchange="reCalculate(this)" value ="{{ product.product.customer_price }}">
+                
+                <tr onchange="reCalculate(this)" value ="{{ product.product.product_id }}">
                     <td>{{ forloop.counter }}</td>
-                    <input name="product_id_{{ forloop.counter }}" type="hidden" value="{{ product.product_id }}">
+                    <input name="product_id_{{ forloop.counter }}" type="hidden" value="{{ product.product.product_id }}">
                     <td><input name="product_name_{{ forloop.counter }}" type="text" class="form-control" placeholder="Product Name" value="{{ product.product.name }}"></td>
                     <td><input name="product_qty_{{ forloop.counter }}" type="number" class="form-control" placeholder="QTY" min="1" value="{{ product.quantity}}"></td>
                     <td><input name="product_price_{{ forloop.counter }}" type="number" class="form-control" placeholder="Price/Unit" step="0.01" value="{{ product.price }}"></td>
@@ -118,9 +120,12 @@
             <input type="hidden" value="0.0" id="total-price-input" name="totalPrice">
         </div>
 
-        <!-- Sell Button -->
-        <button id="sell-button" type="submit">Edit</button>
-
+        <!-- Sell / cancel Buttons -->
+        <div class="cancel-container">
+            <button id="sell-button" type="submit">Edit</button>
+            <a href="/orders_page" class="btn-cancel">Cancel</a>
+        </div>
+        
     </div>
 </form>
 

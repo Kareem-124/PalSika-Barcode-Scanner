@@ -1,4 +1,15 @@
+// First get the table and count the number of rows it already have
+// Then add a new row with the count + 1
 var rowCount = 0;
+document.addEventListener('DOMContentLoaded', (event) => {
+    function addRow() {
+        var table = document.getElementById("products-table");   
+        rowCount = table.rows.length -1;
+        console.log(rowCount);
+    }
+    addRow();
+});
+
 
 const csrf = document.getElementsByName("csrfmiddlewaretoken");
 // Add new product row
@@ -24,7 +35,7 @@ function addProduct() {
         const tableBody = document.getElementById('product-table-body');
         const row = document.createElement('tr');
         row.setAttribute("onchange","reCalculate(this)");
-        row.setAttribute("value",product.customer_price);
+        row.setAttribute("value",product.product_id);
         
         row.innerHTML = `
             <td>${rowCount}</td>
@@ -149,15 +160,22 @@ function totalValue() {
     // Update the total discount and total price elements
     totalDiscount.innerText = totalDisc;
     discountInputElement.value = totalDisc;
+
     let totalOfAllProductsElement = document.getElementById("total-price");
+    let totalInputElement = document.getElementById("total-price-input");
     totalOfAllProductsElement.innerText = total;
-    totalOfAllProductsElement.value = total;
-    // console.log("the total =" +total);
+    totalInputElement.value = total;
+    // console.log("Total Discount: " + totalDisc);
+    // console.log("Total Price: " + total);
+    // console.log("Total Discount Element: ", totalDiscount);
+    // console.log("Discount Input Element: ", discountInputElement);
+    // console.log("Total Price Element: ", totalOfAllProductsElement);
 }
 
 function removeRow(button) {
     const row = button.parentElement.parentElement; // Get the <tr> containing the button
     row.remove();
+    rowCount -= 1;
     totalValue();
 }
 

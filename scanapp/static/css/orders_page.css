@@ -199,7 +199,16 @@ h2 .btn:hover {
     color: #e1b31c;
 
 }
+#changeCustomerCard:hover{
+    color: #e1b31c;
 
+}
+.order-footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
 /* Modal Background */
 .modal {
     display: none;

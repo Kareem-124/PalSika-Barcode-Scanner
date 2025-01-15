@@ -1097,7 +1097,116 @@ def sop_edit_page(request,cardID):
     return render(request, 'sop_edit_page.html', context)
 
 def sop_edit_sell_request(request):
-    return redirect('sop_page')
+    if request.method == 'POST':
+        cardID = request.POST.get('cardID')
+        print(f"Card ID: {cardID}")
+        card = OrderCard.objects.get(id=cardID)
+        order = card.order
+        customerEditName = request.POST.get('customerName')
+        sellingDate = request.POST.get('sellingDate')
+        #-------------------- The below section is responsible for updating the customer name in the order---------------------------------
+        if customerEditName != card.order.customer.name:
+            print(f"Customer name has been changed from {card.order.customer.name} to {customerEditName}")
+        # if the user didn't enter a customer name use N/A as default
+        if not customerEditName:
+            customerEditName = "N/A" 
+        # check if the new customer name exists or not
+        customer, created = Customer.objects.get_or_create(name=customerEditName)
+        card.order.customer = customer
+        card.order.save()
+        print(f"Customer name: {card.order.customer.name}")
+
+        #-------------------- The below section is responsible for updating the delivery date in the order---------------------------------
+        order.delivery_date = sellingDate
+        order.save()
+        print(f"Delivery Date: {order.delivery_date}")
+
+        # ------------------------- Delete all the order items related to this order -------------------------
+        count = 1
+        print(f"I am trying to get product_name_{count}")
+        productName = request.POST.get(f'product_name_{count}')
+        print(productName)
+
+        if productName is None:
+            print("Please Make sure to add at least one product")
+            return redirect('sop_edit_page', cardID=card.id)
+        OrderItem.objects.filter(order=order).delete()  
+        print("All order items have been deleted")
+        #----------------------------- Loop to get the products details  ----------------------------------------
+        
+        while True:
+            try:
+                productName = request.POST.get(f'product_name_{count}')
+                if productName is None:
+                    print("there is no data left!!!")
+                    break # Stop the loop if no more products
+                
+                # Retrieve product ID, quantity, and unit price
+                productID = request.POST.get(f"product_id_{count}") # Get the ID
+                productQTY = request.POST.get(f"product_qty_{count}") # Get the qty
+                productPrice = request.POST.get(f"product_price_{count}") # get the price
+                productDisc = request.POST.get(f"product_disc_{count}") # get the discount
+                try:
+                    totalDisc = request.POST.get("totalDisc") # get the total discount
+                except:
+                    totalDisc = 0
+                
+                try:
+                    totalPrice = request.POST.get("totalPrice") # get the total price
+                except:
+                    totalPrice = 0
+                
+                print(f"Product ID: {productID}")
+                print(f"Product qty: {productQTY}")
+                print(f"Product price: {productPrice}")
+                print(f"Total Discount: {totalDisc}")
+                print(f"Total Price: {totalPrice}")
+                print("-------------")
+                count += 1 
+
+
+                # Create OrderItem if product and quantity exist
+                
+                product = Product.objects.get(product_id=productID)
+                print(f"Product: {product.name}")
+                print("test")
+                total_items_price = (int(productQTY) * float(productPrice)) - float(productDisc)
+                OrderItem.objects.create(
+                    order=order,
+                    product=product,
+                    quantity=int(productQTY),
+                    price=float(productPrice),
+                    discount=float(productDisc),
+                    total_items_price=float(total_items_price),
+                )
+                # product.inventory_qty = int(product.inventory_qty) - int(productQTY)
+                # product.exported_qty = int(product.exported_qty) + int(productQTY)
+                # product.save()
+                print(f"OrderItem created for {product.name}")
+            except Exception as e:
+                print(f"Error: {e}, Breaking out of the loop")
+                break
+
+        #----------------------------- Edit Create Order CARD net price and total discount ----------------------------------------
+        # Check if there is a total discount or not
+        try:
+            totalDisc = request.POST.get("totalDisc") # get the total discount
+            print(f"Try is okay, and total Discount = {totalDisc}")
+        except:
+            totalDisc = 0
+            
+        # check if there is a total price or not
+        try:
+            totalPrice = request.POST.get("totalPrice") # get the total price
+        except:
+            totalPrice = 0
+        card.total_discount = totalDisc
+        card.net_price = totalPrice
+        print(f"Total Discount: {totalDisc}")
+        print(f"Total Price: {totalPrice}")
+        card.save()
+
+        return redirect("sop_page")
 # def sold_products_page(request):
 #     products = Product.objects.all()
 #     today = datetime.now().strftime("%Y-%m-%d")

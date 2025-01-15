@@ -33,7 +33,6 @@ table {
 }
 
 #sell-button {
-    margin-top: 20px;
     background-color: #ffe32d;
     color: black;
     font-weight: bold;
@@ -183,3 +182,33 @@ width: 100%;
 width: 100%;
 }
 }
+.cancel-container {
+display: flex;
+justify-content: flex-end;
+align-items: center;
+margin-top: 20px;
+padding: 10px 0;
+border-top: 1px solid #ddd;
+}
+.btn-cancel {
+
+background-color: #ff4d4d; /* Red background */
+color: white;
+font-weight: bold;
+border: none;
+padding: 5px 10px;
+font-size: 1.2rem;
+
+cursor: pointer;
+border-radius: 3px;
+transition: background-color 0.3s;
+text-decoration: none;
+margin-left: 1rem;
+}
+.btn-cancel:hover {
+background-color: #cc0000; /* Darker red on hover */
+text-decoration: none;
+color: white;
+}
+
+
